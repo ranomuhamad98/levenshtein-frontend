@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+    <div class="wrapper">
+        
+        <%- include ("./header.html") -%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content" style="padding: 20px">
+                <div style="padding: 0px; font-size: 1.5em">
+                    List of OCR Sessions
+                </div>
+                <div class="vertical-separator">
+
+                </div>
+                <div class="button-container">
+                </div> 
+
+                <div class="vertical-separator">
+
+                </div>
+
+                <div class="dataTables_wrapper no-footer">
+                    <div class="dataTables_length">
+                        <label>Show <select class="limitselect">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> entries
+                        </label>
+                    </div>
+                
+                    <div style="padding: 30px">
+                        
+                    </div>
+                
+                    <table id="ocrSessionList">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Session ID</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Document</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <a class="paginate_button previous disabled" data-dt-idx="0" tabindex="-1">Previous</a>
+                        <span>
+                            <a class="paginate_button current" data-dt-idx="1" tabindex="0">1</a>
+                        </span>
+                        <a class="paginate_button next" aria-controls="documentlist" data-dt-idx="3" tabindex="0">Next</a>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+        <!-- /.content-wrapper -->
+        <%- include ("./footer.html") -%>
+
+    </div>
+
+</body>
+<%- include ("./footerscript.html") -%>
+
+<script type="module">
+import { OcrSessionPage }  from './javascripts/pages/ocrsessions.js';
+
+$(document).ready(function () {
+    var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+    console.log(config)
+
+    let ocrSessionPage = new OcrSessionPage();
+    ocrSessionPage.init(config);
+});
+</script>
+</html>

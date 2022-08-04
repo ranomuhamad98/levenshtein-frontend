@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+    <div class="wrapper">
+        
+        <%- include ("./header.html") -%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <div style="display: flex">
+                <div>Document</div>
+                <div style="width: 20px"></div>
+                <div id="document"></div>
+            </div>
+            <div style="height: 20px">
+                
+
+            </div>
+            <div style="display: flex">
+                <div>Select Template to Use</div>
+                <div style="width: 20px"></div>
+                <select class="select2" id="cmb-template" style="width: 400px;">
+
+                </select>
+            </div>
+            <div style="height: 20px"></div>
+            <div style="display: flex">
+                <div>
+                    <button id="btn-start-ocr" class="btn btn-primary">
+                        Start OCR
+                    </button>
+                </div>
+                <div>
+                    <button id="btn-cancel-ocr" class="btn btn-primary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+        <!-- /.content-wrapper -->
+
+
+    </div>
+
+    <%- include ("./footer.html") -%>
+</body> 
+<%- include ("./footerscript.html") -%>
+
+<script type="module">
+import { AddOcrSessionPage }  from '../javascripts/pages/add-ocrsession.js';
+
+$(document).ready(function () {
+    var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+    console.log(config)
+
+    let document = "<%=document %>";
+
+    let addOcrSessionPage = new AddOcrSessionPage();
+    addOcrSessionPage.init(config, document);
+});
+</script>
+</html>

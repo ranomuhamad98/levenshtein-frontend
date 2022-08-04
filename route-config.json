@@ -1,0 +1,7 @@
+[
+    { "path" :  "", "router"  : "./routes/index" },
+    { "path" :  "/login", "router"  : "./routes/login" },
+    { "path" :  "/documents", "router"  : "./routes/documents" },
+    { "path" :  "/templates", "router"  : "./routes/templates" },
+    { "path" :  "/ocrsessions", "router"  : "./routes/ocrsessions" }
+]

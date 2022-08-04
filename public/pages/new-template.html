@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+
+<script src="../javascripts/pdf/pdf.js"></script>
+<script src="../javascripts/pdf/pdf.worker.js"></script>
+
+<script src="../javascripts/huda-table-resizer/huda-table-resizer.js"></script>
+<script src="../javascripts/huda-table-editor.js"></script>
+<link href="../javascripts/huda-table-resizer/huda-table-resizer.css" rel="stylesheet" />
+
+<script src="../javascripts/pages/page2.js"></script>
+
+</head>
+<body>
+    <div>
+        Document : <%=uri %>
+    </div>
+
+    <div style="display: flex; border: solid 1px #ccc; padding: 10px;">
+        <div style="">
+            <button id="btn-prev-image" type="button" class="btn-small btn-block btn-primary"><<</button>
+        </div>
+        <div style="padding-left: 10px; padding-right: 10px; font-size: 10pt;margin-top: 10px;width: 130px" id="page-info">Page</div>
+        <div style="">
+            <button id="btn-next-image" type="button" class="btn-small btn-block btn-primary">>></button>
+        </div>
+        <div style="width: 1px;"></div>
+        <div style="width: 100%; display: inline-flex;">
+            <div class="btn-container" style="display: flex">
+                <button id="btn-create-form" type="button" class="btn btn-primary">
+                    
+                        Guide    Form &nbsp;
+                    
+                </button>
+                <button id="btn-create-table" type="button" class="btn btn-primary">
+                    
+                        Guide Table &nbsp;
+                    
+                </button>
+                <button id="btn-clear-table" type="button" class="btn btn-primary">
+                    
+                    Clear &nbsp;
+                
+                </button>
+            </div>
+            <div style="display: flex; width: 400px">
+                <div style="width: 5px;"></div> 
+                <div style="padding: 6px; padding-top: 2px;">
+                    Template
+                </div>
+                <div style="padding: 0px; width: 300px" class="form-group">
+                    <select id="cmb-template" class="form-control select2" style="width: 100%">
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="btn-container" style="display: flex">
+                <button id="btn-save-template" type="button" class="btn btn-primary">
+                    
+                        Save &nbsp;
+                    
+                </button>
+                <button id="btn-save-new-template" type="button" class="btn btn-primary">
+                    
+                        Save as new &nbsp;
+                    
+                </button>
+                <button id="btn-delete-template" type="button" class="btn btn-primary">
+                    
+                        Delete &nbsp;
+                    
+                </button>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div id="right-displayer" style="display: inline-block; width: 100%;height: 1000px;  border: solid 2px #ccc; vertical-align: top;">
+        <canvas id="pdf-canvas"></canvas>
+        <div id="divPdfTable">
+        
+        </div>
+        <div id="form-boxes" style="width: 100%; height: 1000px;"></div>
+    </div>
+
+    <div id="templateInfoPopup" class="popup-window">
+        <div style="padding: 0px; height: auto;">
+            <div class="form-group">
+                <label>Enter Template's title and its description.</label>
+            </div>
+            <div class="form-group">
+                <label for="templateTitle">Template Title</label>
+                <input type="text" class="form-control" id="templateTitle" placeholder="Enter title">
+            </div>
+            <div class="form-group">
+                <label for="templateDescription">Description</label>
+                <input type="text" class="form-control" id="templateDescription" placeholder="Enter description">
+            </div>
+            <div style="height: 10px">
+
+            </div>
+            <div class="row" style="float: right;">
+                <button id="btnOkTemplate" class="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <div style="width: 10px"></div>
+                <button id="btnCancelTemplate" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fieldNameWindow" class="popup-window">
+        <div style="padding: 30px">
+            <div class="form-group">
+                <label>Enter the fieldname for this bounding box. The value inside this box will be grouped into the fieldname.</label>
+            </div>
+            <div class="form-group">
+                <label for="templateTitle">Field Name</label>
+                <input type="text" class="form-control" id="fieldName" placeholder="Enter title">
+            </div>
+            <div style="height: 10px">
+
+            </div>
+            <div class="row" style="float: right;">
+                <button id="btnOkFieldname" class="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <div style="width: 10px"></div>
+                <button id="btnCancelFieldname" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</body>
+<%- include ("./footerscript.html") -%>
+
+<script>
+
+
+        
+    $(document).ready(function()
+    {
+        Page2.PROJECT = "<%=config.PROJECT %>";
+        Page2.GCS_BUCKET = "<%=config.GCS_BUCKET %>";
+        Page2.GCS_PDF_FOLDER = "<%=config.GCS_PDF_FOLDER %>";
+        Page2.GCS_IMAGE_FOLDER = "<%=config.GCS_IMAGE_FOLDER %>";
+        Page2.GCS_JSON_FOLDER = "<%=config.GCS_JSON_FOLDER %>";
+        Page2.UPLOAD_URL = "<%=config.UPLOAD_URL %>";
+        Page2.LEVENSHTEIN_API = "<%=config.LEVENSHTEIN_API %>";
+        Page2.FILE_URI = "<%=uri %>";
+        Page2.FILE_URI = Page2.FILE_URI.replace("gs://", "https://storage.googleapis.com/")
+    
+        $(document.body).on("mouseover", function(evt){
+            //console.log(evt.pageX)
+        })
+        $("#processgif").hide();
+        var uri = Page2.FILE_URI;
+        console.log("uri")
+        console.log(uri)
+    
+        //uri = decodeURIComponent(uri);
+        uri = "/documents/download/" + encodeURIComponent(uri);
+    
+        console.log(uri);
+    
+        $("#processgif").show();
+        Page2.showPDF2(uri, function()
+        {
+            $("#processgif").hide();
+        });
+    
+        $("#btn-back").on("click", function(){
+            location = "/web";
+        });
+    
+        $("#btn-next").on("click", function()
+        {
+            $("#processgif").show();
+            Page2.saveTable("divPdfTable", function(){
+                let totalPage = Page2.PDF.numPages;
+                let url = "/web/page3?totalpage=" + totalPage + "&uri=<%=uri%>";
+    
+                $("#processgif").hide();
+                location = url;
+            });
+        })
+    
+        $("#btn-save-table").off("click");
+        $("#btn-save-table").on("click", function(){
+            $("#processgif").show();
+            Page2.savePDFImage(function(response){
+                
+                Page2.saveTable("divPdfTable", function(){
+                    Page2.saveResult(function(){
+                        $.notify("Saved", "success")
+                        $("#processgif").hide();
+                    })
+                    
+                })
+            })
+    
+            
+        });
+    
+        $("#btn-prev-image").on("click", function(){
+
+            Page2.CUR_PAGE--;
+            console.log("CUR_PAGE");
+            console.log(CUR_PAGE);
+            if(Page2.CUR_PAGE < 1)
+                Page2.CUR_PAGE = 1;
+            $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+        })
+    
+        $("#btn-next-image").on("click", function(){
+
+            TableResizer.clearTable("divPdfTable")
+            Page2.CUR_PAGE++;
+            console.log("CUR_PAGE");
+            console.log(Page2.CUR_PAGE);
+            if(Page2.CUR_PAGE > Page2.PDF.numPages)
+                Page2.CUR_PAGE = Page2.PDF.numPages;
+            $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);        
+        })
+    
+        $("#btn-autodetect").on("click", function(){
+            //TableResizer.createResizedTable("divPdfTable", 5, 5);
+            Page2.autoDetect();
+        })
+    
+        $("#btn-create-table").on("click", function(){
+            TableResizer.createResizedTable("divPdfTable", 7, 1, true, { type: 'table'}, null, Page2.onTableCellClick);
+        })
+    
+        $("#btn-create-form").on("click", function(){
+            TableResizer.createResizedTable("divPdfTable", 1, 1, false, { type: 'form'}, null, Page2.onTableCellClick);
+            //$("#divPdfTable").css("left", Page2.TABLELEFT)
+            //$("#divPdfTable").css("top", Page2.TABLETOP)
+        })
+    
+    
+        $("#btn-clear-table").on("click", function(){
+            TableResizer.clearTable("divPdfTable");
+        })
+    
+        $("#btn-parseform").on("click", function(){
+            
+            $("#processgif").show();
+            Page2.parseForm(function(forms){
+                Page2.displayForm(forms)
+                $("#processgif").hide();
+                $("#btn-show-tab").attr("hide", "false");
+                $("#result-display-tab").show(500);
+            });
+        })
+    
+        $("#btn-parsetable").on("click", function(){
+            
+            $("#processgif").show();
+            Page2.ocr(Page2.CUR_PAGE, function(){
+                $("#processgif").hide();
+                $("#btn-show-tab").attr("hide", "false");
+                $("#result-display-tab").show(500);
+            });
+        })
+    
+        $("#btn-download").on("click", function(){
+            Page2.downloadResults();
+        })
+    
+    
+        $("#btn-save-template").on("click", function(){
+            Page2.btnSaveTemplateOnClick();
+        })
+    
+        $("#btn-save-new-template").on("click", function(){
+           Page2.btnSaveNewTemplateOnClick();
+        })
+    
+        $("#btn-show-tab").attr("hide", true)
+        $("#btn-show-tab").on("click", function(){
+    
+            if($(this).attr("hide") == "true")
+            {
+                $(this).attr("hide", "false");
+                $("#result-display-tab").show(500);
+                
+            }
+            else
+            {
+                $(this).attr("hide", "true");
+                $("#result-display-tab").hide(500);
+                
+            }
+        })
+    
+        $("#btnCloseResultTab").on("click",function(){
+            $("#btn-show-tab").attr("hide", "true");
+            $("#result-display-tab").hide(500);
+            
+        })
+    
+        $("#btn-delete-template").on("click",function(){
+            Page2.onBtnDeleteTemplateClick();        
+        })
+    
+        Page2.loadTemplates();
+    
+        $('#cmb-template').on("change", function(){
+            Page2.onCmbTemplateChange();
+        })
+    
+    })
+    
+    
+    function redirectPost(url, param)
+    {
+        var form = $('<form action="' + url + '" method="post">' +
+        '<input type="text" name="parameter" value="' + JSON.stringify(param) + '" />' +
+        '</form>');
+        $('body').append(form);
+        form.submit();
+    }
+    
+    
+    
+    
+    
+    
+    </script>
+</html>
