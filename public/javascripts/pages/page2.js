@@ -1145,6 +1145,7 @@ var Page2 = {
         let sTemplate = template.tableTemplate;
         sTemplate = atob(sTemplate);
         let templates =  JSON.parse(sTemplate);
+        templates = templates.boxes;
         TableResizer.createAllResizedTableByInfo("divPdfTable", templates, Page2.onTableCellClick);
     }
     ,

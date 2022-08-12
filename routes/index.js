@@ -23,16 +23,16 @@ function getConfig()
 router.get("", function(req, res){
   
   //req.session.login = false;
-  //if(req.session.login != true)
-  //  res.redirect("/login")
-  //else
-  //{
+  if(req.session.login != true)
+    res.redirect("/login")
+  else
+  {
     var dir = __dirname;
     //var p = path.resolve( dir, "../public/pages/", "index");
     res.redirect("/documents")
     //res.render(p, { config: getConfig() } )
     //res.send("halos")
-  //}
+  }
 });
 
 
