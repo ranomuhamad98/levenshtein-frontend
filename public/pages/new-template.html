@@ -18,7 +18,7 @@
         Document : <%=uri %>
     </div>
 
-    <div style="display: flex; border: solid 1px #ccc; padding: 10px;">
+    <div id="menu-buttons-container" style="display: flex; border: solid 1px #ccc; padding: 10px;">
         <div style="">
             <button id="btn-prev-image" type="button" class="btn-small btn-block btn-primary"><<</button>
         </div>
@@ -146,6 +146,8 @@
         Page2.LEVENSHTEIN_API = "<%=config.LEVENSHTEIN_API %>";
         Page2.FILE_URI = "<%=uri %>";
         Page2.FILE_URI = Page2.FILE_URI.replace("gs://", "https://storage.googleapis.com/")
+
+        Page2.viewMode = "<%=viewMode %>";
     
         $(document.body).on("mouseover", function(evt){
             //console.log(evt.pageX)
@@ -165,149 +167,160 @@
         {
             $("#processgif").hide();
         });
-    
-        $("#btn-back").on("click", function(){
-            location = "/web";
-        });
-    
-        $("#btn-next").on("click", function()
+
+        if(Page2.viewMode == "OCR_RESULT")
         {
-            $("#processgif").show();
-            Page2.saveTable("divPdfTable", function(){
-                let totalPage = Page2.PDF.numPages;
-                let url = "/web/page3?totalpage=" + totalPage + "&uri=<%=uri%>";
-    
-                $("#processgif").hide();
-                location = url;
+            $("#menu-buttons-container").hide();
+        }
+
+        if(Page2.viewMode == "CREATE_TEMPLATE")
+        {
+        
+            $("#btn-back").on("click", function(){
+                location = "/web";
             });
-        })
-    
-        $("#btn-save-table").off("click");
-        $("#btn-save-table").on("click", function(){
-            $("#processgif").show();
-            Page2.savePDFImage(function(response){
-                
+        
+            $("#btn-next").on("click", function()
+            {
+                $("#processgif").show();
                 Page2.saveTable("divPdfTable", function(){
-                    Page2.saveResult(function(){
-                        $.notify("Saved", "success")
-                        $("#processgif").hide();
-                    })
-                    
-                })
+                    let totalPage = Page2.PDF.numPages;
+                    let url = "/web/page3?totalpage=" + totalPage + "&uri=<%=uri%>";
+        
+                    $("#processgif").hide();
+                    location = url;
+                });
             })
-    
-            
-        });
-    
-        $("#btn-prev-image").on("click", function(){
-
-            Page2.CUR_PAGE--;
-            console.log("CUR_PAGE");
-            console.log(CUR_PAGE);
-            if(Page2.CUR_PAGE < 1)
-                Page2.CUR_PAGE = 1;
-            $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
-            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
-        })
-    
-        $("#btn-next-image").on("click", function(){
-
-            TableResizer.clearTable("divPdfTable")
-            Page2.CUR_PAGE++;
-            console.log("CUR_PAGE");
-            console.log(Page2.CUR_PAGE);
-            if(Page2.CUR_PAGE > Page2.PDF.numPages)
-                Page2.CUR_PAGE = Page2.PDF.numPages;
-            $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
-            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);        
-        })
-    
-        $("#btn-autodetect").on("click", function(){
-            //TableResizer.createResizedTable("divPdfTable", 5, 5);
-            Page2.autoDetect();
-        })
-    
-        $("#btn-create-table").on("click", function(){
-            TableResizer.createResizedTable("divPdfTable", 7, 1, true, { type: 'table'}, null, Page2.onTableCellClick);
-        })
-    
-        $("#btn-create-form").on("click", function(){
-            TableResizer.createResizedTable("divPdfTable", 1, 1, false, { type: 'form'}, null, Page2.onTableCellClick);
-            //$("#divPdfTable").css("left", Page2.TABLELEFT)
-            //$("#divPdfTable").css("top", Page2.TABLETOP)
-        })
-    
-    
-        $("#btn-clear-table").on("click", function(){
-            TableResizer.clearTable("divPdfTable");
-        })
-    
-        $("#btn-parseform").on("click", function(){
-            
-            $("#processgif").show();
-            Page2.parseForm(function(forms){
-                Page2.displayForm(forms)
-                $("#processgif").hide();
-                $("#btn-show-tab").attr("hide", "false");
-                $("#result-display-tab").show(500);
-            });
-        })
-    
-        $("#btn-parsetable").on("click", function(){
-            
-            $("#processgif").show();
-            Page2.ocr(Page2.CUR_PAGE, function(){
-                $("#processgif").hide();
-                $("#btn-show-tab").attr("hide", "false");
-                $("#result-display-tab").show(500);
-            });
-        })
-    
-        $("#btn-download").on("click", function(){
-            Page2.downloadResults();
-        })
-    
-    
-        $("#btn-save-template").on("click", function(){
-            Page2.btnSaveTemplateOnClick();
-        })
-    
-        $("#btn-save-new-template").on("click", function(){
-           Page2.btnSaveNewTemplateOnClick();
-        })
-    
-        $("#btn-show-tab").attr("hide", true)
-        $("#btn-show-tab").on("click", function(){
-    
-            if($(this).attr("hide") == "true")
-            {
-                $(this).attr("hide", "false");
-                $("#result-display-tab").show(500);
+        
+            $("#btn-save-table").off("click");
+            $("#btn-save-table").on("click", function(){
+                $("#processgif").show();
+                Page2.savePDFImage(function(response){
+                    
+                    Page2.saveTable("divPdfTable", function(){
+                        Page2.saveResult(function(){
+                            $.notify("Saved", "success")
+                            $("#processgif").hide();
+                        })
+                        
+                    })
+                })
+        
                 
-            }
-            else
-            {
-                $(this).attr("hide", "true");
+            });
+        
+            $("#btn-prev-image").on("click", function(){
+
+                Page2.CUR_PAGE--;
+                console.log("CUR_PAGE");
+                console.log(CUR_PAGE);
+                if(Page2.CUR_PAGE < 1)
+                    Page2.CUR_PAGE = 1;
+                $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+                Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+            })
+        
+            $("#btn-next-image").on("click", function(){
+
+                TableResizer.clearTable("divPdfTable")
+                Page2.CUR_PAGE++;
+                console.log("CUR_PAGE");
+                console.log(Page2.CUR_PAGE);
+                if(Page2.CUR_PAGE > Page2.PDF.numPages)
+                    Page2.CUR_PAGE = Page2.PDF.numPages;
+                $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+                Page2.openPage(Page2.PDF, Page2.CUR_PAGE);        
+            })
+        
+            $("#btn-autodetect").on("click", function(){
+                //TableResizer.createResizedTable("divPdfTable", 5, 5);
+                Page2.autoDetect();
+            })
+        
+            $("#btn-create-table").on("click", function(){
+                TableResizer.createResizedTable("divPdfTable", 7, 1, true, { type: 'table'}, null, Page2.onTableCellClick);
+            })
+        
+            $("#btn-create-form").on("click", function(){
+                TableResizer.createResizedTable("divPdfTable", 1, 1, false, { type: 'form'}, null, Page2.onTableCellClick);
+                //$("#divPdfTable").css("left", Page2.TABLELEFT)
+                //$("#divPdfTable").css("top", Page2.TABLETOP)
+            })
+        
+        
+            $("#btn-clear-table").on("click", function(){
+                TableResizer.clearTable("divPdfTable");
+            })
+        
+            $("#btn-parseform").on("click", function(){
+                
+                $("#processgif").show();
+                Page2.parseForm(function(forms){
+                    Page2.displayForm(forms)
+                    $("#processgif").hide();
+                    $("#btn-show-tab").attr("hide", "false");
+                    $("#result-display-tab").show(500);
+                });
+            })
+        
+            $("#btn-parsetable").on("click", function(){
+                
+                $("#processgif").show();
+                Page2.ocr(Page2.CUR_PAGE, function(){
+                    $("#processgif").hide();
+                    $("#btn-show-tab").attr("hide", "false");
+                    $("#result-display-tab").show(500);
+                });
+            })
+        
+            $("#btn-download").on("click", function(){
+                Page2.downloadResults();
+            })
+        
+        
+            $("#btn-save-template").on("click", function(){
+                Page2.btnSaveTemplateOnClick();
+            })
+        
+            $("#btn-save-new-template").on("click", function(){
+            Page2.btnSaveNewTemplateOnClick();
+            })
+        
+            $("#btn-show-tab").attr("hide", true)
+            $("#btn-show-tab").on("click", function(){
+        
+                if($(this).attr("hide") == "true")
+                {
+                    $(this).attr("hide", "false");
+                    $("#result-display-tab").show(500);
+                    
+                }
+                else
+                {
+                    $(this).attr("hide", "true");
+                    $("#result-display-tab").hide(500);
+                    
+                }
+            })
+        
+            $("#btnCloseResultTab").on("click",function(){
+                $("#btn-show-tab").attr("hide", "true");
                 $("#result-display-tab").hide(500);
                 
-            }
-        })
-    
-        $("#btnCloseResultTab").on("click",function(){
-            $("#btn-show-tab").attr("hide", "true");
-            $("#result-display-tab").hide(500);
-            
-        })
-    
-        $("#btn-delete-template").on("click",function(){
-            Page2.onBtnDeleteTemplateClick();        
-        })
-    
-        Page2.loadTemplates();
-    
-        $('#cmb-template').on("change", function(){
-            Page2.onCmbTemplateChange();
-        })
+            })
+        
+            $("#btn-delete-template").on("click",function(){
+                Page2.onBtnDeleteTemplateClick();        
+            })
+        
+            Page2.loadTemplates();
+        
+            $('#cmb-template').on("change", function(){
+                Page2.onCmbTemplateChange();
+            })
+
+        }
+
     
     })
     

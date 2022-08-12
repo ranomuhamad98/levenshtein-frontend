@@ -299,3 +299,17 @@ thead > tr {
 {
   padding: 20px;
 }
+
+.row-menu
+{
+  color: #5647dacb;
+  font-weight: normal;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.input-label
+{
+  width: 10%;
+  text-align: right;
+}

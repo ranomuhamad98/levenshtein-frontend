@@ -16,8 +16,8 @@ export class DocumentPage extends GenericListPage
     {
         for (var i =0; i < rows.length; i++)
         {
-            rows[i].createTemplate = "<div class='row-button row-create-template' data='" + rows[i].filename + "'>Create Template</div>"
-            rows[i].process = "<div class='row-button row-ocr'  data='" + rows[i].filename + "'>OCR</div>"
+            rows[i].createTemplate = "<div class='row-menu row-create-template' data='" + rows[i].filename + "'>Create Template</div>"
+            rows[i].process = "<div class='row-menu row-ocr'  data='" + rows[i].filename + "'>OCR</div>"
         }
         return rows;
     }

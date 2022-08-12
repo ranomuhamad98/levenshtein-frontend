@@ -1,65 +1,96 @@
 var HudaTableEditor = {
-    apply: function(tbl, onchange, onSelect)
+    apply: function(tbl, onchange, onSelect, disabledcols, disabledrows)
     {
         let trs = $(tbl).children("tr");
-
+        let rowCounter = 0;
         trs.each(function() {
 
             let tds = $(this).find("TD");
 
+            let counter = 0;
             tds.each( function() {
                 let td = this;
-                $(td).on("click", function()
+
+                $(td).attr("data-temp",  "[" + rowCounter  + ", " + counter + "]")
+                
+                let ok = true;
+                if(disabledcols  != null)
                 {
-                    //alert("here")
-                    let child = $(td).html();
-                    
-                    let tag = null;
-                    try
+                    if(disabledcols.includes(counter))
+                        ok = false;
+                }
+
+                if(disabledrows  != null)
+                {
+                    if(disabledrows.includes(rowCounter))
+                        ok = false;
+                }
+
+                if(ok)
+                {
+                    $(td).on("click", function()
                     {
-                        tag = $(child).prop("tagName")
-                    }
-                    catch(e)
-                    {
-                        tag = null
-                    }
-                    if(tag == undefined)
-                        tag = null;
-
-                   
-                    if(tag == null || $(child).prop("tagName").toLowerCase() != "input")
-                    {
-                        let inp = document.createElement("input")
-
-                        $(inp).on("blur", function(){
-                            $(td).html("")
-                            $(td).html($(inp).val());
-                            if(onchange != null)
-                                onchange(HudaTableEditor.getTableValues(tbl))
-                        })
-
-                        $(inp).on("keypress", function(e)
-                        {
-                            if(e.which == 13)
-                            {
-                                $(inp).blur()
-                            }
-                        })
-
-                        $(inp).attr("type", "text")
-                        $(inp).attr("style", "width: 100%; height: 100%; border: solid 1px #ccc")
-                        $(inp).val( $(td).text())
+                        //alert("here")
+                        let child = $(td).html();
                         
-                        $(td).html("")
-                        $(td).append(inp);
-                        $(inp).focus();
-                    }
-                    
-                    if(onSelect != null)
-                        onSelect(td)
-                })
+                        let tag = null;
+                        try
+                        {
+                            tag = $(child).prop("tagName")
+                        }
+                        catch(e)
+                        {
+                            tag = null
+                        }
+                        if(tag == undefined)
+                            tag = null;
+    
+                       
+                        if(tag == null || $(child).prop("tagName").toLowerCase() != "input")
+                        {
+                            let inp = document.createElement("input")
+    
+                            $(inp).on("blur", function(){
+                                $(td).html("")
+                                let text = $(inp).val()
+                                $(td).html(text);
+                                if(onchange != null)
+                                {
+                                    let data = $(td).attr("data-temp")
+                                    data = JSON.parse(data);
+                                    
+                                    onchange(HudaTableEditor.getTableValues(tbl), data, text, td, tbl)
+                                }
+                                    
+                            })
+    
+                            $(inp).on("keypress", function(e)
+                            {
+                                if(e.which == 13)
+                                {
+                                    $(inp).blur()
+                                }
+                            })
+    
+                            $(inp).attr("type", "text")
+                            $(inp).attr("style", "width: 100%; height: 100%; border: solid 1px #ccc")
+                            $(inp).val( $(td).text())
+                            
+                            $(td).html("")
+                            $(td).append(inp);
+                            $(inp).focus();
+                        }
+                        
+                        if(onSelect != null)
+                            onSelect(td)
+                    })
+
+                }
+                counter++;
 
             })
+
+            rowCounter++;
         })
     }
 
@@ -69,9 +100,10 @@ var HudaTableEditor = {
         let data = [];
         let trs = $(tbl).children("tr");
 
+
         trs.each(function() {
             let row = [];
-            let tds = $(this).find("TD");
+            let tds = $(this).children("TD");
             tds.each( function() {
                 row.push($(this).text())
             });

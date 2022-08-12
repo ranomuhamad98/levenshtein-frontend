@@ -39,6 +39,7 @@ app.use(session({
   secret: 'levenshtein-frontend',saveUninitialized: true,resave: false}));
 
 
+
 //Dynamic routing based on configuration
 const fs = require('fs');
 let rawdata = fs.readFileSync('route-config.json');
@@ -48,6 +49,7 @@ routers.forEach(function (route){
   app.use(route.path,  r)
 })
 
+console.log(__dirname)
 
 // set the view engine to ejs
 app.set("view options", {layout: false});  
@@ -90,6 +92,6 @@ app.listen(port)
 
 //Initialization.initializeDatabase();
 
-console.log("Danamon POC server on  port : " + port)
+console.log("Levenshtein Frontend server on  port : " + port)
 
 module.exports = app;

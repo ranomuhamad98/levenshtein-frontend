@@ -11,7 +11,7 @@ export class OcrSessionPage extends GenericListPage
         setInterval(function() {
             me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
             me.initControls();
-        }, 5000)
+        }, 10000)
 
     }
 
@@ -44,9 +44,11 @@ export class OcrSessionPage extends GenericListPage
             if(rows[i].runningStatus == 0)
                 rows[i].runningStatus = "<div style='color: #0000FF'>Not Started</div>";
             if(rows[i].runningStatus == 1)
-                rows[i].runningStatus = "<div style='color: #000000'>Running</div>";
-            if(rows[i].runningStatus == 3)
+                rows[i].runningStatus = "<div style='color: #666666'>Running...</div>";
+            if(rows[i].runningStatus == 2)
                 rows[i].runningStatus = "<div style='color: #00cc00'>Finish</div><div style='text-decoration:underline; cursor:pointer' class='view-ocr-result' data='" + rows[i].id + "'>View Result</div>";
+            if(rows[i].runningStatus == 3)
+                rows[i].runningStatus = "<div style='color: #FF0000'>Fail</div>";
 
         }
 
@@ -58,7 +60,7 @@ export class OcrSessionPage extends GenericListPage
         $(".view-ocr-result").on("click", function()
         {
             let id = $(this).attr("data");
-            location = "/ocrsessions/" + id;
+            location = "/ocrsessions/view?id=" + id;
         })
     }
 }

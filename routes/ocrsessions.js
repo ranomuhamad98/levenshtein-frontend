@@ -47,5 +47,36 @@ router.get("", function(req, res){
     }
 });
 
+router.get("/view", function(req, res){
+  
+  //req.session.login = false;
+  if(req.session.login != true)
+    res.redirect("/login")
+  else
+  {
+    let id = req.query.id;
+    var dir = __dirname;
+    var p = path.resolve( dir, "../public/pages/", "detail-ocrsession");
+    res.render(p, { id: id, config: JSON.stringify(getConfig(req)) } )
+  }
+});
+
+
+router.get("/view-ocr-result", function(req, res){
+  
+  //req.session.login = false;
+  if(req.session.login != true)
+    res.redirect("/login")
+  else
+  {
+    let uri = req.query.uri;
+    let id = req.query.id;
+    let viewMode = "OCR_RESULT";
+    var dir = __dirname;
+    var p = path.resolve( dir, "../public/pages/", "new-template");
+    res.render(p, { id: id, uri: uri, viewMode: viewMode, config: JSON.stringify(getConfig(req)) } )
+  }
+});
+
 
 module.exports = router;

@@ -529,6 +529,12 @@ var Page2 = {
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
+            console.log("page.view")
+            console.log(viewport)
+
+            Page2.DOCUMENT_WIDTH = Math.round(viewport.width);
+            Page2.DOCUMENT_HEIGHT = Math.round(viewport.height);
+
             // Render PDF page into canvas context
             var renderContext = {
                 canvasContext: context,
@@ -866,6 +872,7 @@ var Page2 = {
             let infos =  TableResizer.getAllTableInformation(divId, {})
             console.log("=====saved template=====")
             console.log(infos)
+            infos = { imageWidth: Page2.DOCUMENT_WIDTH, imageHeight: Page2.DOCUMENT_HEIGHT, boxes: infos }
             let url = Page2.LEVENSHTEIN_API + "/templates/create";
             let tableTemplate = JSON.stringify(infos);
     
@@ -989,6 +996,10 @@ var Page2 = {
     {
         let templateId = $('#cmb-template').val();
         let infos =  TableResizer.getAllTableInformation(divId, {})
+
+        console.log(infos)
+        infos = { imageWidth: Page2.DOCUMENT_WIDTH, imageHeight: Page2.DOCUMENT_HEIGHT, boxes: infos }
+
         let tableTemplate = JSON.stringify(infos);
         tableTemplate = btoa(tableTemplate);
         let template = { tableTemplate : tableTemplate };

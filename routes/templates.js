@@ -49,15 +49,19 @@ router.get("", function(req, res){
 
 router.get("/new", function(req, res){
   
+  console.log("here")
   //req.session.login = false;
   if(req.session.login != true)
     res.redirect("/login")
   else
   {
     let uri = req.query.uri;
+    let viewMode = req.query.viewMode;
+    if(viewMode == null)
+      viewMode = "CREATE_TEMPLATE";
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "new-template");
-    res.render(p, { uri: uri, config: getConfig(req) } )
+    res.render(p, { viewMode: viewMode, uri: uri, config: getConfig(req) } )
   }
 });
 

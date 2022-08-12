@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+
+<script src="../javascripts/huda-table-editor.js"></script>
+
+</head>
+<body>
+    <div class="wrapper">
+        
+        <%- include ("./header.html") -%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <div style="margin-left:2%; margin-top: 2%; min-height: 700px">
+
+                <div style="display: flex">
+                    <div class="input-label">Session ID</div>
+                    <div style="width: 20px"></div>
+                    <div id="sessionID"></div>
+                </div>
+                <div style="display: flex">
+                    <div class="input-label">Document</div>
+                    <div style="width: 20px"></div>
+                    <div id="document"></div>
+                </div>
+                <div style="display: flex">
+                    <div class="input-label">Start date</div>
+                    <div style="width: 20px"></div>
+                    <div id="sessionStartDate">
+
+                    </div>
+                </div>
+                <div style="display: flex">
+                    <div class="input-label">End date</div>
+                    <div style="width: 20px"></div>
+                    <div id="sessionEndDate">
+
+                    </div>
+                </div>
+                <div style="display: flex">
+                    <div class="input-label">Status</div>
+                    <div style="width: 20px"></div>
+                    <div id="runningStatus">
+
+                    </div>
+                </div>
+                <div style="height: 20px"></div>
+                <div style="display: flex">
+                    <div style="width: 50px">
+                        Page
+                    </div>
+                    <div style="width: 120px">
+                        <select  style="width: 120px" class="select2" id="cmb-page">
+
+                        </select>
+                    </div>
+                    <div style="width: 20px">
+
+                    </div>
+                    <div style="width: 100px;">
+                        <input type="radio" name="displayType" value="form" /> Form
+                    </div> 
+                    <div style="width: 100px;">
+                        <input type="radio" name="displayType" value="table" /> Table
+                    </div>
+                    <div style="width: 20px">
+
+                    </div>
+                    <div>
+                        <button id="btn-save-changes" class="btn btn-primary">
+                            Save Changes
+                        </button>
+                    </div>
+                    <div>
+                        <button id="btn-download-result" class="btn btn-primary">
+                            Download OCR Results
+                        </button>
+                    </div>
+                    <div>
+                        <button id="btn-cancel-session" class="btn btn-primary">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+                <div style="height: 20px"></div>
+
+
+                <div id="viewOcrResult" style="background-color: #fff;width: 100%; min-height: 700px;padding: 10px">
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- /.content-wrapper -->
+        <%- include ("./footer.html") -%>
+
+    </div>
+
+</body> 
+<%- include ("./footerscript.html") -%>
+
+<script type="module">
+import { DetailOcrSessionPage }  from '../javascripts/pages/detail-ocrsession.js';
+
+$(document).ready(function () {
+    var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+    console.log(config)
+
+    let id = "<%=id %>";
+
+    let detailOcrSessionPage = new DetailOcrSessionPage();
+    detailOcrSessionPage.init(config, id);
+});
+</script>
+</html>

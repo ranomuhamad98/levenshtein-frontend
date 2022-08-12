@@ -37,27 +37,31 @@ function getConfig(req)
 router.get("", function(req, res){
   
   //req.session.login = false;
-  if(req.session.login != true)
+  /*if(req.session.login != true)
     res.redirect("/login")
   else
   {
+    */
     var dir = __dirname;
+    console.log(dir)
     var p = path.resolve( dir, "../public/pages/", "documents");
+    console.log(p)
     res.render(p, { config: JSON.stringify(getConfig(req)) } )
-  }
+  //}
 });
 
 router.get("/upload", function(req, res){
   
     //req.session.login = false;
-    if(req.session.login != true)
+    /*if(req.session.login != true)
       res.redirect("/login")
     else
     {
+      */
       var dir = __dirname;
       var p = path.resolve( dir, "../public/pages/", "documents-upload");
       res.render(p, { config: JSON.stringify(getConfig(req)) } )
-    }
+    //}
 });
 
 router.get('/download/:url', function(req,res){
