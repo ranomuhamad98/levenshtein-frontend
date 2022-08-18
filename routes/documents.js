@@ -46,7 +46,7 @@ router.get("", function(req, res){
     console.log(dir)
     var p = path.resolve( dir, "../public/pages/", "documents");
     console.log(p)
-    res.render(p, { config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -60,7 +60,7 @@ router.get("/upload", function(req, res){
       
       var dir = __dirname;
       var p = path.resolve( dir, "../public/pages/", "documents-upload");
-      res.render(p, { config: JSON.stringify(getConfig(req)) } )
+      res.render(p, {session: req.session, config: JSON.stringify(getConfig(req)) } )
     }
 });
 

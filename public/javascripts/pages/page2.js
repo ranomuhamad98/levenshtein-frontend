@@ -514,6 +514,7 @@ var Page2 = {
     ,
     openPage: function(pdf, pageNumber, callback)
     {
+        
         // Fetch the first page
         //var pageNumber = 1;
         pdf.getPage(pageNumber).then(function(page) {
@@ -889,7 +890,7 @@ var Page2 = {
                     if(response.success)
                     {
                         if(callback != null)
-                            callback();
+                            callback(response.payload);
                     }
                     else 
                     {
@@ -926,10 +927,15 @@ var Page2 = {
         })
     }
     ,
+    fiednameWindowOriginalPosition: null,
     onTableCellClick: function(cell, tbl)
     {
+   
         $("#fieldName").val("");
-        $("#fieldNameWindow").show(500);
+        $("#fieldNameWindow").show(500, function(){
+            $("#fieldName").focus();        
+        });
+
         if($(cell).attr("fieldname") != null)
         {
             $("#fieldName").val($(cell).attr("fieldname"));
@@ -938,13 +944,24 @@ var Page2 = {
         $("#btnOkFieldname").off("click");
         $("#btnOkFieldname").on("click", function(){
             $("#fieldNameWindow").hide(500);
-            $(cell).attr("fieldname", $("#fieldName").val());
+            let fieldnameValue = $("#fieldName").val();
+            $(cell).attr("fieldname", fieldnameValue );
+
+            TableResizer.refreshCell(cell)
+
         });
 
         $("#btnCancelFieldname").off("click");
         $("#btnCancelFieldname").on("click", function(){
             $("#fieldNameWindow").hide(500);
         });
+
+        $("#fieldName").on("keyup", function(event){
+            if(event.keyCode == 13)
+            {
+                $("#btnOkFieldname").click()
+            }
+        })
 
     }
     ,
@@ -1022,17 +1039,31 @@ var Page2 = {
     {
     
         $("#processgif").show();
-        Page2.saveAsTemplate("divPdfTable", function(response){
-            $("#processgif").hide();
-            if(response.success)
-            {
-                $.notify("Saving template is successful", 'success');
-                Page2.loadTemplates();
-            }
-            else
-                $.notify(response.error, 'error')
+        let templateId = $('#cmb-template').val();
 
-        });
+        if(templateId ==  -1)
+        {
+            alert("Please, select template to update or save as new template!")
+        }
+        else 
+        {
+            Page2.saveAsTemplate("divPdfTable", function(response){
+                $("#processgif").hide();
+                if(response.success)
+                {
+                    $.notify("Saving template is successful", 'success');
+                    Page2.loadTemplates(function(){
+                        $('#cmb-template').val(templateId);
+                    });
+                    
+                }
+                else
+                    $.notify(response.error, 'error')
+    
+            });
+
+        }
+
     }
     ,
     btnSaveNewTemplateOnClick: function()
@@ -1045,11 +1076,13 @@ var Page2 = {
         $("#btnOkTemplate").on("click", function(){
 
             $("#processgif").show();
-            Page2.saveAsNewTemplate("divPdfTable", function(){
+            Page2.saveAsNewTemplate("divPdfTable", function(newTemplate){
                 $("#templateInfoPopup").hide(500);
                 Page2.loadTemplates(function(){
                     $("#processgif").hide();
                     $.notify("Template saved!", "success")
+                    let templateId = newTemplate.id;
+                    $("#cmb-template").val(templateId);
                 });
 
             },
@@ -1151,23 +1184,39 @@ var Page2 = {
     ,
     onCmbTemplateChange: function()
     {
+
+        console.log("onCmbTemplateChange")
         let templateid =  $("#cmb-template").val();
-        $("#processgif").show();
-        Page2.getTemplate(templateid, function(template){
 
-            console.log('Template')
-            console.log(template)
+        if(templateid == -1)
+        {
+            TableResizer.clearTable("divPdfTable")
+        }
+        else 
+        {
 
-            let tableTemplate = template.tableTemplate;
-            tableTemplate = atob(tableTemplate);
-            console.log(tableTemplate)
-
-            $("#processgif").hide();
-            Page2.displayTemplate(template)
-
-        }, function( error){
-            $("#processgif").hide();
-            alert(error)
-        })
+            $("#processgif").show();
+            Page2.getTemplate(templateid, function(template){
+    
+                console.log('Template')
+                console.log(template)
+    
+                let tableTemplate = template.tableTemplate;
+                tableTemplate = atob(tableTemplate);
+                console.log(tableTemplate)
+    
+                $("#processgif").hide();
+                Page2.displayTemplate(template)
+    
+            }, function( error){
+                $("#processgif").hide();
+                alert(error)
+            })
+        }
+    }
+    ,
+    removeSelected: function(divid)
+    {
+        TableResizer.removeSelectedTable(divid)
     }
 }

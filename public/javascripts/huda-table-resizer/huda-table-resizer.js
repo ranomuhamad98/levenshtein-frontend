@@ -3,6 +3,7 @@ var TableResizer = {
     tables: [],
     clear: function()
     {
+        $("#" + divId).html("");
         TableResizer.tables = [];
     }
     ,
@@ -413,7 +414,14 @@ var TableResizer = {
         $("#drag-" + tblId).off("mousedown");
         $("#drag-" + tblId).on("mousedown", function()
         {
+            $(".tbldragger").css("opacity", ".2");
             $("#tbl-container-" + tblId).draggable();
+            $("#drag-" + tblId).css("opacity", "1");
+
+            $(".tblcontainer").css("z-index", 1);
+            TableResizer.selectedTableId = tblId;
+            $("#tbl-container-" + tblId).css("z-index", 100)
+
         })
     
         $("#drag-" + tblId).off("mouseup");
@@ -431,7 +439,7 @@ var TableResizer = {
         $("#drag-" + tblId).off("mouseout");
         $("#drag-" + tblId).on("mouseout", function()
         {
-            $("#drag-" + tblId).css("opacity", ".2");
+            //$("#drag-" + tblId).css("opacity", ".2");
         })
     
         $("#"+ tblId + " .coladd").off("click");
@@ -473,7 +481,11 @@ var TableResizer = {
 
         $("#" + tblId + " td").off("dblclick");
         $("#" + tblId + " td").on("dblclick", function(){
-            if(tbl.onCellClick != null)
+
+            let data = $(tbl).attr("data")
+            data = JSON.parse(data);
+
+            if(tbl.onCellClick != null && data.type == "form")
                 tbl.onCellClick(this, tbl);
         })
     
@@ -539,6 +551,18 @@ var TableResizer = {
                     console.log(info)
                     TableResizer.createResizedTableByInfo(divId, info.tableId, false, info, { type: 'form' }, onCellClick)
                     $("#" + info.tableId + " td").attr("fieldname", info.fieldname )
+                    let td = $("#" + info.tableId + " td")[0]
+                    TableResizer.refreshCell(td)
+
+                   /* if(info.fieldname != null)
+                    {
+                        let div = "<div style='background-color:#fff; padding:5px; width: auto'>FIELD: " + info.fieldname +  "</div>";
+                        $("#" + info.tableId + " td").html(div);
+
+                    }
+
+                    */ 
+
                 }
                 else 
                 {
@@ -585,6 +609,8 @@ var TableResizer = {
             $(this).css("width", info.headers[idx].width);
             $(this).css("height", info.headers[idx].height);
             $(this).attr("fieldname", info.headers[idx].fieldname );
+
+            TableResizer.refreshCell($(this)[0])
         });
     
         $(table).find("tr[row-idx]").each(function(rowIdx){
@@ -771,7 +797,41 @@ var TableResizer = {
     clearTable: function(divId)
     {
         $("#" + divId).html("");
-        TableResizer.table = [];
+        TableResizer.tables = [];
+    }
+    ,
+    refreshCell: function(cell) {
+
+        let fieldname = $(cell).attr("fieldname");
+        if(fieldname != null)
+        {
+            $(cell).find(".dragger-column-container .field-displayer").remove();
+            let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";
+            $(div).off("dblclick");
+            $(div).on("dblclick", function(){
+                cell.click();
+            })
+            $(cell).find(".dragger-column-container").prepend(div)
+        }
+    }
+    ,
+    removeSelectedTable: function(divId)
+    {
+        if(TableResizer.tables != null)
+        {
+            let idx = 0;
+            let foundIdx  = 0;
+            TableResizer.tables.map((table)=>{
+                if(TableResizer.selectedTableId != null  && TableResizer.selectedTableId == table.id)
+                {
+                    $("#tbl-container-" + table.id).remove();
+                    foundIdx = idx;
+                }
+                idx++;
+            })
+
+            TableResizer.tables.splice(foundIdx,1)
+        }
     }
 
 }

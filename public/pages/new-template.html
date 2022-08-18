@@ -18,8 +18,8 @@
         Document : <%=uri %>
     </div>
 
-    <div id="menu-buttons-container" style="display: flex; border: solid 1px #ccc; padding: 10px;">
-        <div style="">
+    <div id="menu-buttons-container" style="z-index: 1000000; display: flex; border: solid 1px #ccc; padding: 10px; background-color: #fff; position: fixed; left:0;  top: 0px">
+        <div>
             <button id="btn-prev-image" type="button" class="btn-small btn-block btn-primary"><<</button>
         </div>
         <div style="padding-left: 10px; padding-right: 10px; font-size: 10pt;margin-top: 10px;width: 130px" id="page-info">Page</div>
@@ -38,6 +38,11 @@
                     
                         Guide Table &nbsp;
                     
+                </button>
+                <button id="btn-clear-selected" type="button" class="btn btn-primary">
+                    
+                    Remove Selected &nbsp;
+                
                 </button>
                 <button id="btn-clear-table" type="button" class="btn btn-primary">
                     
@@ -59,7 +64,7 @@
             <div class="btn-container" style="display: flex">
                 <button id="btn-save-template" type="button" class="btn btn-primary">
                     
-                        Save &nbsp;
+                        Update &nbsp;
                     
                 </button>
                 <button id="btn-save-new-template" type="button" class="btn btn-primary">
@@ -77,7 +82,7 @@
         
     </div>
     
-    <div id="right-displayer" style="display: inline-block; width: 100%;height: 1000px;  border: solid 2px #ccc; vertical-align: top;">
+    <div id="right-displayer" style="display: inline-block; width: 100%;height: 1000px;  border: solid 2px #ccc; vertical-align: top;margin-top: 60px;">
         <canvas id="pdf-canvas"></canvas>
         <div id="divPdfTable">
         
@@ -109,7 +114,7 @@
         </div>
     </div>
 
-    <div id="fieldNameWindow" class="popup-window">
+    <div id="fieldNameWindow" class="popup-window" style="">
         <div style="padding: 30px">
             <div class="form-group">
                 <label>Enter the fieldname for this bounding box. The value inside this box will be grouped into the fieldname.</label>
@@ -191,6 +196,12 @@
                     location = url;
                 });
             })
+
+                    
+            $("#btn-clear-selected").on("click", function()
+            {
+                Page2.removeSelected("divPdfTable");
+            })
         
             $("#btn-save-table").off("click");
             $("#btn-save-table").on("click", function(){
@@ -205,7 +216,6 @@
                         
                     })
                 })
-        
                 
             });
         
@@ -213,10 +223,14 @@
 
                 Page2.CUR_PAGE--;
                 console.log("CUR_PAGE");
-                console.log(CUR_PAGE);
+                console.log(Page2.CUR_PAGE);
                 if(Page2.CUR_PAGE < 1)
                     Page2.CUR_PAGE = 1;
                 $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+                
+                Page2.loadTemplates(function (){
+                    $("#cmb-template").val(-1)
+                })
                 Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
             })
         
@@ -229,6 +243,10 @@
                 if(Page2.CUR_PAGE > Page2.PDF.numPages)
                     Page2.CUR_PAGE = Page2.PDF.numPages;
                 $("#page-info").html("Page : " + Page2.CUR_PAGE + " of " + Page2.PDF.numPages);
+
+                Page2.loadTemplates(function (){
+                    $("#cmb-template").val(-1)
+                })
                 Page2.openPage(Page2.PDF, Page2.CUR_PAGE);        
             })
         

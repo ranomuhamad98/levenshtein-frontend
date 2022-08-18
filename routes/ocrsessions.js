@@ -30,7 +30,7 @@ router.get("/add", function(req, res){
     let uri = req.query.document;
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "add-ocrsession");
-    res.render(p, { document: uri, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, document: uri, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -43,7 +43,7 @@ router.get("", function(req, res){
     {
       var dir = __dirname;
       var p = path.resolve( dir, "../public/pages/", "ocrsessions");
-      res.render(p, { config: JSON.stringify(getConfig(req)) } )
+      res.render(p, { session: req.session, config: JSON.stringify(getConfig(req)) } )
     }
 });
 
@@ -57,7 +57,7 @@ router.get("/view", function(req, res){
     let id = req.query.id;
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "detail-ocrsession");
-    res.render(p, { id: id, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, id: id, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -74,7 +74,7 @@ router.get("/view-ocr-result", function(req, res){
     let viewMode = "OCR_RESULT";
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "new-template");
-    res.render(p, { id: id, uri: uri, viewMode: viewMode, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, id: id, uri: uri, viewMode: viewMode, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
