@@ -420,7 +420,7 @@ var TableResizer = {
 
             $(".tblcontainer").css("z-index", 1);
             TableResizer.selectedTableId = tblId;
-            $("#tbl-container-" + tblId).css("z-index", 100)
+            $("#tbl-container-" + tblId).css("z-index", 10)
 
         })
     
@@ -610,6 +610,7 @@ var TableResizer = {
             $(this).css("height", info.headers[idx].height);
             $(this).attr("fieldname", info.headers[idx].fieldname );
 
+            //alert($(this).attr("fieldname"))
             TableResizer.refreshCell($(this)[0])
         });
     
@@ -805,13 +806,26 @@ var TableResizer = {
         let fieldname = $(cell).attr("fieldname");
         if(fieldname != null)
         {
+            if(fieldname == "NO PACKING LIST")
+            {
+                console.log("cell")
+                console.log(cell)
+                
+
+            }
             $(cell).find(".dragger-column-container .field-displayer").remove();
             let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";
             $(div).off("dblclick");
             $(div).on("dblclick", function(){
                 cell.click();
             })
-            $(cell).find(".dragger-column-container").prepend(div)
+
+            console.log("==============" + fieldname)
+            console.log($(cell).children().find(".dragger-column-container"))
+            $(cell).children().find(".dragger-column-container").prepend(div)
+        }
+        else {
+            $(cell).find(".dragger-column-container .field-displayer").remove();
         }
     }
     ,

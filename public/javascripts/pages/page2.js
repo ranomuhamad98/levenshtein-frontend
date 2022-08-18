@@ -945,9 +945,16 @@ var Page2 = {
         $("#btnOkFieldname").on("click", function(){
             $("#fieldNameWindow").hide(500);
             let fieldnameValue = $("#fieldName").val();
+
             $(cell).attr("fieldname", fieldnameValue );
 
+            if(fieldnameValue == null || fieldnameValue.length ==  0)
+            {
+                $(cell).removeAttr("fieldname")
+                
+            }
             TableResizer.refreshCell(cell)
+            
 
         });
 
