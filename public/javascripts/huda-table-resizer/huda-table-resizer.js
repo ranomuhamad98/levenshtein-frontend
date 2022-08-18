@@ -292,6 +292,7 @@ var TableResizer = {
         })
     
         $(td).html(TableResizer.getThLastContent());
+        TableResizer.refreshCell(td);   
     
     }
     ,
@@ -554,15 +555,6 @@ var TableResizer = {
                     let td = $("#" + info.tableId + " td")[0]
                     TableResizer.refreshCell(td)
 
-                   /* if(info.fieldname != null)
-                    {
-                        let div = "<div style='background-color:#fff; padding:5px; width: auto'>FIELD: " + info.fieldname +  "</div>";
-                        $("#" + info.tableId + " td").html(div);
-
-                    }
-
-                    */ 
-
                 }
                 else 
                 {
@@ -617,13 +609,15 @@ var TableResizer = {
         $(table).find("tr[row-idx]").each(function(rowIdx){
             
             let rowid = $(this).attr("row-idx");
-            console.log("row " +  rowid)
+            //console.log("row " +  rowid)
             if(rowid > -1)
             {
                 $(this).find("td").each(function(colIdx){
                     $(this).css("height", info.rows[rowid][colIdx].height);
                     $(this).css("width", info.rows[rowid][colIdx].width);
                     $(this).attr("fieldname", info.rows[rowid][colIdx].fieldname);
+
+                    //TableResizer.refreshCell($(this)[0])
                 })
             }
     
@@ -632,6 +626,8 @@ var TableResizer = {
     
         TableResizer.setLastTdContent(table);
         TableResizer.initTableEvents(table);
+
+
     
     }
     ,
@@ -797,6 +793,7 @@ var TableResizer = {
     ,
     clearTable: function(divId)
     {
+        
         $("#" + divId).html("");
         TableResizer.tables = [];
     }
@@ -806,13 +803,11 @@ var TableResizer = {
         let fieldname = $(cell).attr("fieldname");
         if(fieldname != null)
         {
-            if(fieldname == "NO PACKING LIST")
-            {
-                console.log("cell")
-                console.log(cell)
-                
+            console.log("==============" + fieldname)
 
-            }
+            console.log("cell")
+            console.log(cell)
+            
             $(cell).find(".dragger-column-container .field-displayer").remove();
             let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";
             $(div).off("dblclick");
@@ -820,9 +815,14 @@ var TableResizer = {
                 cell.click();
             })
 
-            console.log("==============" + fieldname)
-            console.log($(cell).children().find(".dragger-column-container"))
+            
+            //console.log($(cell).children().find(".dragger-column-container"))
+            //(cell).html(div)
             $(cell).children().find(".dragger-column-container").prepend(div)
+
+            //let dd = $("th[fieldname='amount']");
+            //console.log(dd)
+            //$("th[fieldname='amount']").html(div)
         }
         else {
             $(cell).find(".dragger-column-container .field-displayer").remove();
