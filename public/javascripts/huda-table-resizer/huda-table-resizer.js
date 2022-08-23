@@ -1,7 +1,7 @@
 var TableResizer = {
     DRAG: false,
     tables: [],
-    clear: function()
+    clear: function(divId)
     {
         $("#" + divId).html("");
         TableResizer.tables = [];

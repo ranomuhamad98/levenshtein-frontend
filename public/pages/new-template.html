@@ -18,11 +18,11 @@
         Document : <%=uri %>
     </div>
 
-    <div id="menu-buttons-container" style="z-index: 1000000; display: flex; border: solid 1px #ccc; padding: 10px; background-color: #fff; position: fixed; left:0;  top: 0px">
+    <div id="menu-buttons-container" style="z-index: 10; display: flex; border: solid 1px #ccc; padding: 10px; background-color: #fff; position: fixed; left:0;  top: 0px">
         <div>
             <button id="btn-prev-image" type="button" class="btn-small btn-block btn-primary"><<</button>
         </div>
-        <div style="padding-left: 10px; padding-right: 10px; font-size: 10pt;margin-top: 10px;width: 130px" id="page-info">Page</div>
+        <div style="padding-left: 10px; padding-right: 10px; font-size: 9pt;margin-top: 10px;width: 100px" id="page-info">Page</div>
         <div style="">
             <button id="btn-next-image" type="button" class="btn-small btn-block btn-primary">>></button>
         </div>
@@ -50,13 +50,13 @@
                 
                 </button>
             </div>
-            <div style="display: flex; width: 400px">
+            <div style="display: flex; width: 300px">
                 <div style="width: 5px;"></div> 
-                <div style="padding: 6px; padding-top: 2px;">
+                <div style="padding: 6px; padding-top: 3%; font-size: 9pt;">
                     Template
                 </div>
-                <div style="padding: 0px; width: 300px" class="form-group">
-                    <select id="cmb-template" class="form-control select2" style="width: 100%">
+                <div style="padding: 0px; width: 400px" class="form-group">
+                    <select id="cmb-template" class="form-control select2" style="width: 90%;">
                         
                     </select>
                 </div>
@@ -64,19 +64,24 @@
             <div class="btn-container" style="display: flex">
                 <button id="btn-save-template" type="button" class="btn btn-primary">
                     
-                        Update &nbsp;
+                        Update Template&nbsp;
                     
                 </button>
                 <button id="btn-save-new-template" type="button" class="btn btn-primary">
                     
-                        Save as new &nbsp;
+                        Save as New  Template&nbsp;
                     
                 </button>
                 <button id="btn-delete-template" type="button" class="btn btn-primary">
                     
-                        Delete &nbsp;
+                        Delete  Template &nbsp;
                     
                 </button>
+                <button id="btn-save-page-template" type="button" class="btn btn-primary">
+                    
+                    Save Page  Template &nbsp;
+                
+            </button>
             </div>
         </div>
         
@@ -133,6 +138,9 @@
             </div>
         </div>
     </div>
+    <div id="processgif">
+
+    </div>
 </body>
 <%- include ("./footerscript.html") -%>
 
@@ -143,7 +151,7 @@
     $(document).ready(function()
     {
         Page2.PROJECT = "<%=config.PROJECT %>";
-        Page2.GCS_BUCKET = "<%=config.GCS_BUCKET %>";
+        Page2.GCS_UPLOAD_BUCKET = "<%=config.GCS_UPLOAD_BUCKET %>";
         Page2.GCS_PDF_FOLDER = "<%=config.GCS_PDF_FOLDER %>";
         Page2.GCS_IMAGE_FOLDER = "<%=config.GCS_IMAGE_FOLDER %>";
         Page2.GCS_JSON_FOLDER = "<%=config.GCS_JSON_FOLDER %>";
@@ -264,7 +272,10 @@
                 //$("#divPdfTable").css("left", Page2.TABLELEFT)
                 //$("#divPdfTable").css("top", Page2.TABLETOP)
             })
-        
+
+            $("#btn-save-page-template").on("click", function(){
+                Page2.savePageTemplate("divPdfTable")
+            })
         
             $("#btn-clear-table").on("click", function(){
                 TableResizer.clearTable("divPdfTable");

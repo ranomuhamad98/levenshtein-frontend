@@ -27,10 +27,10 @@ router.get("/add", function(req, res){
     res.redirect("/login")
   else
   {
-    let uri = req.query.document;
+    let documentId = req.query.documentid;
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "add-ocrsession");
-    res.render(p, { session: req.session, document: uri, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, documentid: documentId, config: JSON.stringify(getConfig(req)) } )
   }
 });
 

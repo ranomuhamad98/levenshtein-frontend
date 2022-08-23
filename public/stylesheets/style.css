@@ -21,6 +21,13 @@ a {
   border: 0px solid;
   border-color: #ccc;
 }
+
+.btn-container > button
+{
+  font-size: 9pt;
+}
+
+
 .icon-container
 {
   display: flex;
@@ -138,6 +145,7 @@ a {
   background-repeat: no-repeat;
   background-size: auto 100%;
   display: none;
+  z-index: 1000000;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {

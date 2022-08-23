@@ -13,7 +13,7 @@
             <!-- Main content -->
             <section style="margin-left:20%; margin-top: 20%">
             <div>
-                We are going to create session for OCR. Please select the template to  use to OCR the document.
+                We are going to create session for OCR. This may take some times to finish.
             </div>
             <div style="display: flex">
                 <div>Document</div>
@@ -23,13 +23,6 @@
             <div style="height: 20px">
                 
 
-            </div>
-            <div style="display: flex">
-                <div>Select Template to Use</div>
-                <div style="width: 20px"></div>
-                <select class="select2" id="cmb-template" style="width: 400px;">
-
-                </select>
             </div>
             <div style="height: 20px"></div>
             <div style="display: flex">
@@ -65,10 +58,10 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
-    let document = "<%=document %>";
+    let documentid = "<%=documentid %>";
 
     let addOcrSessionPage = new AddOcrSessionPage();
-    addOcrSessionPage.init(config, document);
+    addOcrSessionPage.init(config, documentid);
 });
 </script>
 </html>

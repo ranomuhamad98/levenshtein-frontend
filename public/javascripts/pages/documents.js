@@ -17,7 +17,7 @@ export class DocumentPage extends GenericListPage
         for (var i =0; i < rows.length; i++)
         {
             rows[i].createTemplate = "<div class='row-menu row-create-template' data='" + rows[i].filename + "'>Create Template</div>"
-            rows[i].process = "<div class='row-menu row-ocr'  data='" + rows[i].filename + "'>OCR</div>"
+            rows[i].process = "<div class='row-menu row-ocr'  data='" + rows[i].id + "'>OCR</div>"
         }
         return rows;
     }
@@ -60,8 +60,8 @@ export class DocumentPage extends GenericListPage
         //window.open("/templates/new?uri=" + encodeURIComponent(uri), "","height=200,width=400,scrollbars=no")
     }
 
-    onOcrClick(uri)
+    onOcrClick(idDocument)
     {
-        location = "/ocrsessions/add?document=" + encodeURIComponent(uri);
+        location = "/ocrsessions/add?documentid=" + encodeURIComponent(idDocument);
     }
 }

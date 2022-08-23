@@ -1,11 +1,18 @@
 export class AddOcrSessionPage
 {
-    init(config, document)
+    init(config, documentid)
     {
         var me = this;
         this.config = config;
-        this.document = document;
-        $("#document").html(document)
+        this.documentid = documentid;
+
+        me.getDocumentById(documentid).then((document)=>{
+            me.document = document.filename.replace("gs://", "https://storage.googleapis.com/");
+
+            let a = "<a target='__blank' href='" + me.document + "'>" + me.document + "</a>"
+            $("#document").html(a)
+        })
+        
         $("#btn-start-ocr").on("click", function(){
             me.onStartButtonClick(me.document);
         })
@@ -22,6 +29,26 @@ export class AddOcrSessionPage
                 $("#processgif").hide();
             }
         })
+    }
+
+    getDocumentById(id)
+    {
+        let promise = new Promise((resolve, reject)=>{
+
+            let url = this.config.LEVENSHTEIN_API + "/documents/get/" + id;
+            $.get(url, function(response){
+                if(response.success)
+                {
+                    resolve(response.payload)
+                }
+                else 
+                {
+                    reject(response.error);
+                }
+            })
+        })
+
+        return promise;
     }
 
     getTemplates (callback)
@@ -81,6 +108,7 @@ export class AddOcrSessionPage
         }
         else 
         {
+            $("#processgif").hide()
             alert(result.message)
         }
 
@@ -93,12 +121,10 @@ export class AddOcrSessionPage
 
     assembleOcrSession(filepath)
     {
-        let templateId = $("#cmb-template").val();
         let ocrSession = {
             document: filepath,
             sessionStartDate : Date.now(),
             runningStatus : 0,
-            templateId
         }
 
         return ocrSession;
@@ -128,8 +154,6 @@ export class AddOcrSessionPage
 
     validateOcrSession(ocrSession)
     {
-        if(ocrSession.templateId == null)
-            return { valid: false, message: 'Please, select template'}
         if(ocrSession.document == null)
             return { valid: false, message: 'Please, select document'}
 

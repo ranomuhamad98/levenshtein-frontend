@@ -1,4 +1,3 @@
-
 var Page2 = {
 
     json: {},
@@ -16,11 +15,7 @@ var Page2 = {
             console.log("RESPONSE FROM PARSE");
             console.log(response);
 
-
             let data =  response.payload;
-
-            //
-
             data = Page2.toTable(data);
 
             Page2.json.table = data;
@@ -514,10 +509,14 @@ var Page2 = {
     ,
     openPage: function(pdf, pageNumber, callback)
     {
+
+        $("#processgif").show();
         
         // Fetch the first page
         //var pageNumber = 1;
         pdf.getPage(pageNumber).then(function(page) {
+
+            $("#processgif").hide();
             console.log('Page loaded');
             Page2.PAGE = page;
             
@@ -549,7 +548,8 @@ var Page2 = {
                     callback();
             });
 
-            TableResizer.clear();
+            TableResizer.clear("divPdfTable");
+            Page2.getAndDisplayPageTemplate("divPdfTable")
         });
     }
     ,
@@ -862,6 +862,16 @@ var Page2 = {
 
     }
     ,
+    getTemplateFromUI: function(divId)
+    {
+        let infos =  TableResizer.getAllTableInformation(divId, {})
+        console.log("=====saved template=====")
+        console.log(infos)
+        infos = { imageWidth: Page2.DOCUMENT_WIDTH, imageHeight: Page2.DOCUMENT_HEIGHT, boxes: infos }
+        let tableTemplate = JSON.stringify(infos);
+        return tableTemplate;
+    }
+    ,
     saveAsNewTemplate: function(divId, callback, callbackError)
     {
 
@@ -869,13 +879,10 @@ var Page2 = {
         {
     
             //$("#processgif").show();
-            console.log("")
-            let infos =  TableResizer.getAllTableInformation(divId, {})
-            console.log("=====saved template=====")
-            console.log(infos)
-            infos = { imageWidth: Page2.DOCUMENT_WIDTH, imageHeight: Page2.DOCUMENT_HEIGHT, boxes: infos }
+
             let url = Page2.LEVENSHTEIN_API + "/templates/create";
-            let tableTemplate = JSON.stringify(infos);
+      
+            let tableTemplate = Page2.getTemplateFromUI(divId);
     
             let template =  {};
             template.title = $("#templateTitle").val();
@@ -1019,12 +1026,8 @@ var Page2 = {
     saveAsTemplate: function(divId, callback)
     {
         let templateId = $('#cmb-template').val();
-        let infos =  TableResizer.getAllTableInformation(divId, {})
-
-        console.log(infos)
-        infos = { imageWidth: Page2.DOCUMENT_WIDTH, imageHeight: Page2.DOCUMENT_HEIGHT, boxes: infos }
-
-        let tableTemplate = JSON.stringify(infos);
+        
+        let tableTemplate = Page2.getTemplateFromUI(divId);
         tableTemplate = btoa(tableTemplate);
         let template = { tableTemplate : tableTemplate };
         Page2.updateTemplate(templateId, JSON.stringify( template), function (response){
@@ -1198,6 +1201,7 @@ var Page2 = {
         if(templateid == -1)
         {
             TableResizer.clearTable("divPdfTable")
+            Page2.getAndDisplayPageTemplate("divPdfTable")
         }
         else 
         {
@@ -1226,4 +1230,139 @@ var Page2 = {
     {
         TableResizer.removeSelectedTable(divid)
     }
+    ,
+    savePageTemplate: function(divId)
+    {
+        Page2.uploadCurrentPageImage(function(response){
+
+            let url = Page2.LEVENSHTEIN_API + "/pagetemplates/create-update";
+            let fileurl = response.payload;
+            fileurl = fileurl.replace("gs://", "https://storage.googleapis.com/")
+
+            let pageTemplate = {};
+            //pageTemplate.templateId = $("#cmb-template").val();
+            pageTemplate.pageImageUrl = fileurl;
+            pageTemplate.document = Page2.FILE_URI;
+            pageTemplate.page = Page2.CUR_PAGE;
+            pageTemplate.tableTemplate = Page2.getTemplateFromUI(divId)
+            pageTemplate.tableTemplate = btoa(pageTemplate.tableTemplate);
+    
+    
+            console.log("PageTemplate")
+            console.log(pageTemplate)
+            
+            $("#processgif").show();
+            $.post(url, JSON.stringify(pageTemplate), function(response){
+                console.log(response)
+                if(response.success)
+                {
+                    $.notify("Template for this  page is  saved", "success")
+                }
+                else {
+                    $.notify("Error :  " + response.message, "error")
+                }
+                $("#processgif").hide();
+            })
+        }, function(err){
+            alert("Error")
+        })
+
+    }
+    ,
+    makeid (length) 
+    {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * 
+        charactersLength));
+       }
+       return result;
+    }
+    ,
+    uploadCurrentPageImage(callback, callbackError)
+    {
+
+        try 
+        {
+
+            document.getElementById("pdf-canvas").toBlob((blob) => {
+                let fname = Page2.makeid(10) + ".png"
+                let file = new File([blob], fname, { type: "image/png" })
+
+
+                var formdata = new FormData();
+                formdata.append("file", file, fname);
+    
+                let uploadUrl = Page2.UPLOAD_URL + "/upload/gcs/" + Page2.PROJECT + "/" + Page2.GCS_UPLOAD_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER;
+    
+                console.log("uploadUrl")
+                console.log(uploadUrl)
+    
+                $.ajax({
+                    url: uploadUrl,
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                }).done(function(respond){
+                    //alert(respond);
+                    console.log("RESPON")
+                    console.log(respond)
+    
+                    if(callback != null)
+                        callback(respond)
+                });
+
+
+              }, 'image/jpeg');
+              
+
+
+        }
+        catch (error){
+            if(callbackError != callbackError)
+                callbackError(error)
+        }
+
+    }
+    ,
+    getAndDisplayPageTemplate(divId)
+    {
+        $("#processgif").show();
+        Page2.getPageTemplate(function(pageTemplate){
+            $("#processgif").hide();
+            
+            //let template = pageTemplate.tableTemplate;
+            Page2.displayTemplate(pageTemplate);
+        }, function(){
+            $("#processgif").hide();
+        })
+
+    }
+    ,
+    getPageTemplate(callback, callbackError)
+    {
+        let document = Page2.FILE_URI;
+        document = document.replace(/%20/gi, " ");
+        document = encodeURIComponent(document)
+
+        let page = Page2.CUR_PAGE;
+
+        let url = Page2.LEVENSHTEIN_API + "/pagetemplates/get-by-document-page/" + document + "/" + page;
+        $.get(url, function(response){
+            if(response.success)
+            {
+                if(callback != null)
+                    callback(response.payload)
+            }
+            else 
+            {
+                if(callbackError != null)
+                    callbackError(response)
+            }
+        })
+    }
+    
 }
