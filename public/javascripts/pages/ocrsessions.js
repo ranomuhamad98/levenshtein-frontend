@@ -11,7 +11,7 @@ export class OcrSessionPage extends GenericListPage
         setInterval(function() {
             me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
             me.initControls();
-        }, 20000)
+        }, 5000)
 
     }
 

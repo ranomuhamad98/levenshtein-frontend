@@ -103,7 +103,7 @@ export class DetailOcrSessionPage
         let ocrResults = me.ocrSession.ocrResult;
         ocrResults = atob(ocrResults);
         ocrResults = JSON.parse(ocrResults)
-        return ocrResults.length;
+        return ocrResults.length - 1;
     }
 
     getSession (id, callback)
