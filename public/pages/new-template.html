@@ -30,25 +30,57 @@
         <div style="width: 100%; display: inline-flex;">
             <div class="btn-container" style="display: flex">
                 <button id="btn-create-form" type="button" class="btn btn-primary">
-                    
-                        Guide    Form &nbsp;
-                    
+                    <img src="../images/white-forms.png">
                 </button>
                 <button id="btn-create-table" type="button" class="btn btn-primary">
                     
-                        Guide Table &nbsp;
+                    <img src="../images/white-tables.png">
                     
                 </button>
                 <button id="btn-clear-selected" type="button" class="btn btn-primary">
                     
-                    Remove Selected &nbsp;
+                    <img src="../images/white-remove-selection.png">
                 
                 </button>
                 <button id="btn-clear-table" type="button" class="btn btn-primary">
                     
-                    Clear &nbsp;
+                    <img src="../images/white-clear.png">
                 
                 </button>
+                <button id="btn-rotate-clockwise" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-clockwise.png">
+                
+                </button>
+                <button id="btn-rotate-counterclockwise" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-counterclockwise.png">
+                
+                </button>
+
+                <button id="btn-up" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-up.png">
+                
+                </button>
+                <button id="btn-down" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-down.png">
+                
+                </button>
+                <button id="btn-left" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-left.png">
+                
+                </button>
+                <button id="btn-right" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white-right.png">
+                
+                </button>
+
+
+
             </div>
             <div style="display: flex; width: 300px">
                 <div style="width: 5px;"></div> 
@@ -348,6 +380,29 @@
                 Page2.onCmbTemplateChange();
             })
 
+            $("#btn-rotate-clockwise").on("click", function(){
+                Page2.rotate(0.1);
+            })
+
+            $("#btn-rotate-counterclockwise").on("click", function(){
+                Page2.rotate(-0.1);
+            })
+            
+            $("#btn-up").on("click", function(){
+                Page2.up(0.1);
+            })
+
+            $("#btn-down").on("click", function(){
+                Page2.down(0.1);
+            })
+
+            $("#btn-left").on("click", function(){
+                Page2.left(0.1);
+            })
+
+            $("#btn-up").on("click", function(){
+                Page2.right(0.1);
+            })
         }
 
     

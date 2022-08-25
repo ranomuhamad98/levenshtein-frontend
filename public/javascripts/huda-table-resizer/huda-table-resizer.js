@@ -310,7 +310,6 @@ var TableResizer = {
     
         $("#" + tblId + " .dragger-column").off("mousedown");
         $("#" + tblId + " .dragger-column").mousedown(function(e) {
-            console.log(tblId)
             if(TableResizer.DRAG == false)
             {
                 var tagname = "th";
@@ -318,10 +317,8 @@ var TableResizer = {
                     tagname = "th";
                 else
                     tagname = "td";
-                console.log("tagname : "  + tagname)
                 start = $(this).parents(tagname);
     
-                console.log(start)
                 pressedcol = true;
                 startX = e.pageX;
                 startWidth = $(this).parents(tagname).css("width");
@@ -342,13 +339,11 @@ var TableResizer = {
     
                 start = $(this).parents(tagname);
     
-                console.log(start[0])
                 pressedrow = true;
                 startY = e.pageY;
                 startWidth = $(this).parents(tagname).css("width");
                 startHeight = $(this).parents(tagname).css("height");
-                console.log("startHeight")
-                console.log(startHeight)
+    
                 //$(start).addClass("resizing");
             }
         });
@@ -379,7 +374,6 @@ var TableResizer = {
                 
             }
             if(pressedrow) {
-                console.log("here")
                 let hh  = parseFloat( startHeight)+(e.pageY-startY);
                 let rowIdx = $(start).attr("row-idx");
                 $("#" + tblId + " td[row-idx=" + rowIdx + "]").height(hh);
@@ -541,15 +535,12 @@ var TableResizer = {
     ,
     createAllResizedTableByInfo: function(divId, infos, onCellClick=null)
     {
-        console.log("infos")
-        console.log(infos)
+
         if(infos != null && infos.length >  0)
         {
             infos.map((info) => {
                 if(info.type == "form")
                 {
-                    console.log("info")
-                    console.log(info)
                     TableResizer.createResizedTableByInfo(divId, info.tableId, false, info, { type: 'form' }, onCellClick)
                     $("#" + info.tableId + " td").attr("fieldname", info.fieldname )
                     let td = $("#" + info.tableId + " td")[0]
@@ -558,8 +549,6 @@ var TableResizer = {
                 }
                 else 
                 {
-                    console.log("info")
-                    console.log(info)
                     TableResizer.createResizedTableByInfo(divId, info.tableId, true, info, { type: 'table' }, onCellClick)
                 }
 
@@ -571,7 +560,6 @@ var TableResizer = {
     ,
     createResizedTableByInfo: function(divId, tableId, header, info, data, onCellClick=null)
     {
-        console.log("createResizedTableByInfo");
         
         if(info.totalColumn == null)
             info.totalColumn = 1;
@@ -585,7 +573,6 @@ var TableResizer = {
             info.rows.push([{ width: info.width, height: info.height}])
         }
         
-        console.log(info);
         TableResizer.createResizedTable(divId, info.totalColumn, info.totalRows, header, data, tableId, onCellClick );
     
         var table = $("#" + divId).find("table[id='" + tableId + "'")[0];
@@ -644,14 +631,11 @@ var TableResizer = {
     getAllTableInformation: function(divId, opt)
     {   
         let infos = []
-        console.log("TABLES")
-        console.log(TableResizer.tables);
         
         TableResizer.tables.map((tbl) => {
             let info = {};
             let tableId = tbl.id;
             let containerId = "tbl-container-" + tableId + "";
-            console.log(containerId )
 
             var tableContainer = $("#" + containerId)   [0];
             let tableHeight = $("#" + tableId).height();
@@ -659,12 +643,8 @@ var TableResizer = {
             let containerHeight = $(tableContainer).height();
             let deltaheight  = containerHeight - tableHeight;
 
-            console.log(tableContainer)
             let posY = parseFloat($(tableContainer).position().top) + deltaheight;
             let posX = parseFloat($(tableContainer).position().left);
-
-            console.log("Position for " + tbl.id)
-            console.log("Top : "  +  posY + ", Left :  " + posX)
 
             info.tableId = tableId;
             info.tablePosY = posY;
@@ -803,10 +783,6 @@ var TableResizer = {
         let fieldname = $(cell).attr("fieldname");
         if(fieldname != null)
         {
-            console.log("==============" + fieldname)
-
-            console.log("cell")
-            console.log(cell)
             
             $(cell).find(".dragger-column-container .field-displayer").remove();
             let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";

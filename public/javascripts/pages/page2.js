@@ -7,6 +7,7 @@ var Page2 = {
     PDFJS : null,
     TABLELEFT:207,
     TABLETOP:586,
+    IMAGES: [],
     ocr: function(page, callback)
     {
         console.log("OCR")
@@ -514,43 +515,123 @@ var Page2 = {
         
         // Fetch the first page
         //var pageNumber = 1;
-        pdf.getPage(pageNumber).then(function(page) {
 
-            $("#processgif").hide();
-            console.log('Page loaded');
-            Page2.PAGE = page;
-            
-            var scale = 2.44;
-            var viewport = page.getViewport({scale: scale});
 
-            // Prepare canvas using PDF page dimensions
-            var canvas = document.getElementById('pdf-canvas');
-            var context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            console.log("page.view")
-            console.log(viewport)
-
-            Page2.DOCUMENT_WIDTH = Math.round(viewport.width);
-            Page2.DOCUMENT_HEIGHT = Math.round(viewport.height);
-
-            // Render PDF page into canvas context
-            var renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            var renderTask = page.render(renderContext);
-            renderTask.promise.then(function () {
-                console.log(canvas.toDataURL('image/jpeg'));
-                console.log('Page rendered');
-                if(callback != null)
-                    callback();
-            });
-
+        if(pageNumber in Page2.IMAGES)
+        {
+            Page2.displayImage(Page2.IMAGES[pageNumber])
             TableResizer.clear("divPdfTable");
             Page2.getAndDisplayPageTemplate("divPdfTable")
-        });
+        }
+        else 
+        {
+            pdf.getPage(pageNumber).then(function(page) {
+
+                $("#processgif").hide();
+                console.log('Page loaded');
+                Page2.PAGE = page;
+                
+                var scale = 2.44;
+                var viewport = page.getViewport({scale: scale});
+    
+                // Prepare canvas using PDF page dimensions
+                var canvas = document.getElementById('pdf-canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+    
+                console.log("page.view")
+                console.log(viewport)
+    
+                Page2.DOCUMENT_WIDTH = Math.round(viewport.width);
+                Page2.DOCUMENT_HEIGHT = Math.round(viewport.height);
+    
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                renderTask.promise.then(function () {
+                    //console.log(canvas.toDataURL('image/jpeg'));
+                    console.log('Page rendered');
+                    Page2.saveDisplayedImage();
+                    
+                    if(callback != null)
+                        callback();
+                });
+    
+                TableResizer.clear("divPdfTable");
+                Page2.getAndDisplayPageTemplate("divPdfTable")
+            });
+
+        }
+
+    }
+    ,
+    displayImage: function(image)
+    {
+        console.log('displayImage')
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0)
+    }
+    ,
+    saveDisplayedImage: function()
+    {
+        var canvas=document.getElementById("pdf-canvas");
+        let img = document.createElement("img")
+        img.onload = function()
+        {
+            Page2.IMAGES[Page2.CUR_PAGE] = img; 
+        }
+        img.src = canvas.toDataURL('image/jpeg')   
+    }
+    ,
+    rotate: function(degrees)
+    {
+
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL();
+
+        image.onload = function()
+        {
+            console.log('here')
+            console.log(image.height)
+            if(canvas) document.getElementById("right-displayer").removeChild(canvas);
+
+            canvas = document.createElement("canvas");
+            canvas.id = "pdf-canvas"
+            var ctx=canvas.getContext("2d");
+            //canvas.style.width="20%";
+    
+            if(degrees == 90 || degrees == 270) {
+                canvas.width = image.height;
+                canvas.height = image.width;
+            } else {
+                canvas.width = image.width;
+                canvas.height = image.height;
+            }
+    
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            if(degrees == 90 || degrees == 270) {
+                ctx.translate(image.height/2,image.width/2);
+            } else {
+                ctx.translate(image.width/2,image.height/2);
+            }
+            ctx.rotate(degrees*Math.PI/180);
+            ctx.drawImage(image,-image.width/2,-image.height/2);
+    
+            let elm = document.getElementById("right-displayer")
+            elm.insertBefore(canvas, elm.firstChild );
+
+            Page2.saveDisplayedImage();
+
+        }
     }
     ,
     retrieveResultJson: function( callback, callbackError)
