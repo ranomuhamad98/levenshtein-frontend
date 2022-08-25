@@ -555,7 +555,7 @@ var Page2 = {
                 renderTask.promise.then(function () {
                     //console.log(canvas.toDataURL('image/jpeg'));
                     console.log('Page rendered');
-                    Page2.saveDisplayedImage();
+                    //Page2.saveDisplayedImage();
                     
                     if(callback != null)
                         callback();
@@ -572,6 +572,7 @@ var Page2 = {
     displayImage: function(image)
     {
         console.log('displayImage')
+        console.log(image.id)
         var canvas=document.getElementById("pdf-canvas");
         var ctx=canvas.getContext("2d");
         ctx.drawImage(image, 0, 0)
@@ -579,10 +580,13 @@ var Page2 = {
     ,
     saveDisplayedImage: function()
     {
+        console.log("saveDisplayedImage")
         var canvas=document.getElementById("pdf-canvas");
         let img = document.createElement("img")
+        img.id  = Page2.CUR_PAGE;
         img.onload = function()
         {
+            console.log("image.onload() on  "  + Page2.CUR_PAGE)
             Page2.IMAGES[Page2.CUR_PAGE] = img; 
         }
         img.src = canvas.toDataURL('image/jpeg')   
@@ -602,12 +606,7 @@ var Page2 = {
         {
             console.log('here')
             console.log(image.height)
-            if(canvas) document.getElementById("right-displayer").removeChild(canvas);
 
-            canvas = document.createElement("canvas");
-            canvas.id = "pdf-canvas"
-            var ctx=canvas.getContext("2d");
-            //canvas.style.width="20%";
     
             if(degrees == 90 || degrees == 270) {
                 canvas.width = image.height;
@@ -622,16 +621,95 @@ var Page2 = {
                 ctx.translate(image.height/2,image.width/2);
             } else {
                 ctx.translate(image.width/2,image.height/2);
-            }
+            }   
             ctx.rotate(degrees*Math.PI/180);
             ctx.drawImage(image,-image.width/2,-image.height/2);
     
-            let elm = document.getElementById("right-displayer")
-            elm.insertBefore(canvas, elm.firstChild );
+            //let elm = document.getElementById("right-displayer")
+            //elm.insertBefore(canvas, elm.firstChild );
 
             Page2.saveDisplayedImage();
-
         }
+    }
+    ,
+    up: function(value)
+    {
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL();
+
+        image.onload = function()
+        {
+            console.log('here')
+            console.log(image.height)
+
+            ctx.drawImage(image, 0,-value);
+            Page2.saveDisplayedImage();
+        }
+
+    }
+    ,
+    down: function(value)
+    {
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL();
+
+        image.onload = function()
+        {
+            console.log('here')
+            console.log(image.height)
+            
+            ctx.drawImage(image, 0,value);
+            Page2.saveDisplayedImage();
+        }
+
+    }
+    ,
+    left: function(value)
+    {
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL();
+
+        image.onload = function()
+        {
+            console.log('here')
+            console.log(image.height)
+            
+            ctx.drawImage(image, -value,0);
+            Page2.saveDisplayedImage();
+        }
+
+    }
+    ,
+    right: function(value)
+    {
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL();
+
+        image.onload = function()
+        {
+            console.log('here')
+            console.log(image.height)
+            
+            ctx.drawImage(image, value,0);
+            Page2.saveDisplayedImage();
+        }
+
     }
     ,
     retrieveResultJson: function( callback, callbackError)
