@@ -61,6 +61,8 @@ export class DetailOcrSessionPage
         $("#btn-cancel-session").on("click", function(){
             location = "/ocrsessions"
         });
+        
+        //$("input[name='displayType']").val("form")
     }
 
     onChangeEvent(me)
@@ -103,7 +105,7 @@ export class DetailOcrSessionPage
         let ocrResults = me.ocrSession.ocrResult;
         ocrResults = atob(ocrResults);
         ocrResults = JSON.parse(ocrResults)
-        return ocrResults.length - 1;
+        return ocrResults.length;
     }
 
     getSession (id, callback)
@@ -218,7 +220,9 @@ export class DetailOcrSessionPage
     createFormDisplay(me, page)
     {
         let ocrResult = me.getOcrResultByPage(me, page)
-        let formOcrResult = ocrResult.allResults.formOcrResult;
+        let formOcrResult = ocrResult.allResults.formOcrResult.positions;
+        $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>" + ocrResult.allResults.formOcrResult.image + "</a>")
+
 
         console.log(formOcrResult)
 
@@ -258,7 +262,10 @@ export class DetailOcrSessionPage
 
         let tables = [];
         let ocrResult = me.getOcrResultByPage(me, page)
+
         let tableOcrResult = ocrResult.allResults.tableOcrResult;
+
+        $("#result-image").html("")
 
         console.log(tableOcrResult)
 
@@ -270,7 +277,10 @@ export class DetailOcrSessionPage
             $(tbl).attr("id", tableResult.tableID)
             $(tbl).attr("type", "table")
 
-            let rows = tableResult.result;
+            let rows = tableResult.result.positions;
+            let img = tableResult.result.image;
+
+            $("#result-image").append("<a target='_blank' href='" + img  + "'>" + img + "</a>")
 
             let firstRow = rows[0];
             console.log("firstRow")
