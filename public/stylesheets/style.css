@@ -334,10 +334,14 @@ thead > tr {
 }
 
 [class*=sidebar-dark] .user-panel {
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 0px solid #ffffff;
 }
 
 [class*=sidebar-dark] .brand-link {
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 0px solid #ffffff;
   color: rgba(255,255,255,.8);
+}
+
+[class*=sidebar-dark-] .sidebar a {
+  color: #ffffff;
 }
