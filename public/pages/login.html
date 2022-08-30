@@ -38,21 +38,21 @@
                         <h3>Levensthein Document AI</h3>
                     </div>
                     <br>
-                    <form action="/" method="POST" class="card border-0 shadow-sm">
+                    <div action="/" method="POST" class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <!-- <div class="mb-3">
-                                <label for="usernameInput" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="usernameInput"
-                                    placeholder="Enter your username">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="email"
+                                    placeholder="Enter your email">
                             </div>
                             <div class="mb-4">
                                 <label for="passwordInput" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="passwordInput"
+                                <input type="password" class="form-control" id="userPassword"
                                     placeholder="Enter your password">
                             </div>
                             <div class="d-grid gap-2">
-                                <button class="btn btn-primary fw-bold" type="submit">Login</button>
-                            </div> -->
+                                <button class="btn btn-primary fw-bold" id="btn-login">Login</button>
+                            </div> 
                             <!-- <br>
                             <div id="gSignInWrapper">
                                 <span class="label">Masuk dengan Google</span>
@@ -63,11 +63,10 @@
                             </div>
                             <div id="name"></div> -->
                             <!-- <br> -->
-                            <label class="form-label fw-bold">Masuk</label>
                             <div id="my-signin2"></div>
 
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,7 +80,14 @@
         crossorigin="anonymous"></script>
 </body>
 
+<script src="../admin-lte-3/plugins/jquery/jquery.min.js"></script>
+
+<div id="processgif">
+
+</div>
 <script>
+
+    /*
     function onSuccess(googleUser) {
         //console.log(googleUser)
         let email = googleUser.getBasicProfile().getEmail();
@@ -109,9 +115,35 @@
       }, 100);
       
     }
+    */
+
+    $(document).ready(function(){
+        var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+
+        $("#btn-login").on("click", function(){
+            let email = $("#email").val();
+            let password = $("#userPassword").val();
+            let user = { email: email, userPassword: password }
+            let url = "/users/login";
+            $("#processgif").show();
+            $.post(url, JSON.stringify(user), function(response){
+                console.log(response)
+                $("#processgif").hide();
+                if(response.success)
+                {
+                    location = "/"
+                }
+                else
+                {
+                    alert("Invalid email or password!")
+                }
+            })
+        })
+    })
   </script>
 
   <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
-  <%- include ("./footerscript.html") -%>
 </html>

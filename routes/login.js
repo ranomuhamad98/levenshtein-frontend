@@ -15,6 +15,7 @@ function getConfig()
     config.GCS_JSON_FOLDER = process.env.GCS_JSON_FOLDER;
     config.GCS_CSV_FOLDER = process.env.GCS_CSV_FOLDER;
     config.UPLOAD_BASE_URL = process.env.UPLOAD_BASE_URL;
+    config.LEVENSHTEIN_API = process.env.LEVENSHTEIN_API;
     config.OCR_URL = process.env.OCR_URL;
     return config;
 }
@@ -50,7 +51,16 @@ router.get('/authenticate/:email/:name', function(req,res){
     req.session.email = email;
     req.session.name = name;
 
+
+    console.log("here")
     res.redirect("/")
+    //res.redirect("/")
+    /*
+    var dir = __dirname;
+    var p = path.resolve( dir, "../public/pages/", "redirect");
+    res.render(p, { config: getConfig() } )
+
+    */
 
 })
 
@@ -69,7 +79,7 @@ router.get('/signout', function(req,res){
 router.get("", function(req, res){
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "login");
-    res.render(p, { config: getConfig() } )
+    res.render(p, { config: JSON.stringify(getConfig(req))  } )
 });
 
 

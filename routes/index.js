@@ -16,6 +16,7 @@ function getConfig()
     config.GCS_JSON_FOLDER = process.env.GCS_JSON_FOLDER;
     config.GCS_CSV_FOLDER = process.env.GCS_CSV_FOLDER;
     config.UPLOAD_BASE_URL = process.env.UPLOAD_BASE_URL;
+    config.LEVENSHTEIN_API = process.env.LEVENSHTEIN_API;
     config.OCR_URL = process.env.OCR_URL;
     return config;
 }

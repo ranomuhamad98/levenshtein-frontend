@@ -41,6 +41,8 @@
             </p>
             </a>
         </li>
+        <% if(session.role == 'ADMIN' || session.role == 'USER_TEMPLATE') { %>
+
         <li class="nav-item">
             <a href="/templates" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
@@ -49,18 +51,24 @@
                 </p>
             </a>
         </li>
+
+        <% } %>
+
+        <% if(session.role == 'ADMIN' || session.role == 'USER_OCR') { %>
+
         <li class="nav-item">
             <a href="/ocrsessions" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
-                    OCR Sessions & Result
+                    OCR & Result
                 </p>
             </a>
         </li>
         
+        <% } %>
         
         <li class="nav-header">ADMINISTRATION</li>
-        <li class="nav-item">
+        <li class="nav-item" style="display: none">
             <a href="pages/calendar.html" class="nav-link">
             <i class="nav-icon far fa-calendar-alt"></i>
             <p>
@@ -70,18 +78,29 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="pages/gallery.html" class="nav-link">
+            <a href="/users/profile" class="nav-link">
             <i class="nav-icon far fa-image"></i>
             <p>
                 Profile
             </p>
             </a>
         </li>
+
+        <% if(session.role == 'ADMIN') { %>
         <li class="nav-item">
-            <a href="pages/kanban.html" class="nav-link">
+            <a href="/users" class="nav-link">
             <i class="nav-icon fas fa-columns"></i>
             <p>
                 User Management
+            </p>
+            </a>
+        </li>
+        <% } %>
+        <li class="nav-item">
+            <a href="/login/signout" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>
+                Logout
             </p>
             </a>
         </li>

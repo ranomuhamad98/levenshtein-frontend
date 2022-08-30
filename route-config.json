@@ -3,5 +3,6 @@
     { "path" :  "/login", "router"  : "./routes/login" },
     { "path" :  "/documents", "router"  : "./routes/documents" },
     { "path" :  "/templates", "router"  : "./routes/templates" },
-    { "path" :  "/ocrsessions", "router"  : "./routes/ocrsessions" }
+    { "path" :  "/ocrsessions", "router"  : "./routes/ocrsessions" },
+    { "path" :  "/users", "router"  : "./routes/users" }
 ]

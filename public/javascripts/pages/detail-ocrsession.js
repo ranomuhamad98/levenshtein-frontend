@@ -366,7 +366,45 @@ export class DetailOcrSessionPage
     {
         let  id = me.ocrSession.id;
         let url = this.config.LEVENSHTEIN_API + "/ocrsessions/download-ocr-result/" + id;
-        window.open(url);
+
+        console.log("url");
+        console.log(url);
+
+        $.get(url, function(response){
+            console.log("response")
+            console.log(response)
+            let uri = response.payload.uri;
+            
+            me.interval = setInterval(function()
+            {
+                me.checkAndDownloadOcrResult(me, uri)
+            }, 1000)
+
+
+        } )
+        //window.open(url);
+    }
+
+    checkAndDownloadOcrResult(me, uri)
+    {
+        uri = uri.replace("gs://", "")
+        let uris = uri.split("/")
+
+        let bucket = uris[0]
+        let filepath = uri.replace(bucket + "/", "")
+        filepath = encodeURIComponent(filepath)
+
+        let url =  me.config.UPLOAD_URL + "/upload/gcs/download-file/" + me.config.PROJECT + "/" + me.config.GCS_UPLOAD_BUCKET + "/" +  filepath
+        console.log("checkAndDownloadOcrResult().url : " + url)
+        $.get(url, function(response){
+            console.log('checkAndDownloadOcrResult().response')
+            //console.log(response)
+            if(response.success != false)
+            {
+                clearInterval(me.interval)
+                window.open(url, "__blank")
+            }
+        })
     }
 
 }

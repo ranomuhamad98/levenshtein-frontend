@@ -41,7 +41,8 @@ router.get("", function(req, res){
     res.redirect("/login")
   else
   {
-    
+    console.log("req.session")
+    console.log(req.session)
     var dir = __dirname;
     console.log(dir)
     var p = path.resolve( dir, "../public/pages/", "documents");

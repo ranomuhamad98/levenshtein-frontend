@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+    <div class="wrapper">
+        
+        <%- include ("./header.html") -%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section style="margin-left:5%; margin-top: 5%">
+            
+            <div class="form-group">
+                <label for="firstname">Fullname</label>
+                <input type="text" class="form-control" id="firstname" placeholder="Enter name" data="firstname">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" data="email">
+            </div>
+            <div class="form-group" id="groupUserRole">
+                <label for="userRole">Role</label>
+                <select class="select2" id="userRole" style="width: 100%;">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="TEMPLATE_USER">TEMPLATE USER</option>
+                    <option value="OCR_USER">OCR USER</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="changePassword">
+                    <label class="form-check-label">Change Password</label>
+                </div>
+            </div>
+            
+            <div id="changePasswordGroup">
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" class="form-control" id="userPassword" placeholder="Enter password" data="userPassword">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Enter confirm password" data="confirmPassword">
+                </div>
+            </div>
+            <div style="height: 20px">
+                
+
+            </div>
+            <div style="height: 20px"></div>
+            <div style="display: flex">
+                <div>
+                    <button id="btn-save-user" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+                <div>
+                    <button id="btn-cancel-user" class="btn btn-primary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            </section>
+            
+        </div>
+        <!-- /.content-wrapper -->
+
+
+    </div>
+
+    <%- include ("./footer.html") -%>
+</body> 
+<%- include ("./footerscript.html") -%>
+
+<script type="module">
+import { AddEditUserPage } from '../javascripts/pages/add-edit-user.js';
+
+$(document).ready(function () {
+    var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+    console.log(config)
+
+    let userid = "<%=user_id %>";
+    let profile = "<%=profile %>";
+
+    let addEditUser = new AddEditUserPage();
+    addEditUser.init(config, userid, profile);
+});
+</script>
+</html>
