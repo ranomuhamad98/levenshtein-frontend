@@ -1449,14 +1449,30 @@ var Page2 = {
 
             Page2.uploadCurrentPageImage(filename, function(response){
                 Page2.createUpdateCurrentPageTemplate(response.payload, "divPdfTable")
+                Page2.updateDocument();
             })
 
         }, function(){
             Page2.uploadCurrentPageImage(null, function(response){
                 Page2.createUpdateCurrentPageTemplate(response.payload, "divPdfTable")
+                Page2.updateDocument();
             })
         })
 
+    }
+    ,
+    updateDocument: function()
+    {
+        let fileuri = Page2.FILE_URI;
+        fileuri = fileuri.replace("https://storage.googleapis.com/", "gs://")
+        let url = Page2.LEVENSHTEIN_API + "/documents/update-date";
+        url += "/" + encodeURIComponent(fileuri);
+
+        console.log("update doccument")
+        $.get(url, function(response){
+            console.log("response")
+            console.log(response)
+        })
     }
     ,
     createUpdateCurrentPageTemplate: function(fileurl, divId)

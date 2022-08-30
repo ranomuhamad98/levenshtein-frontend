@@ -43,7 +43,7 @@ router.get("", function(req, res){
   {
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "templates");
-    res.render(p, { session: req.session, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -61,7 +61,7 @@ router.get("/new", function(req, res){
       viewMode = "CREATE_TEMPLATE";
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "new-template");
-    res.render(p, { session: req.session, viewMode: viewMode, uri: uri, config: getConfig(req) } )
+    res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), viewMode: viewMode, uri: uri, config: getConfig(req) } )
   }
 });
 

@@ -83,8 +83,12 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let ocrSessionPage = new OcrSessionPage();
-    ocrSessionPage.init(config);
+    ocrSessionPage.init(config, session);
 });
 </script>
 </html>

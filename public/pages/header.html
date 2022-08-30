@@ -41,7 +41,7 @@
             </p>
             </a>
         </li>
-        <% if(session.role == 'ADMIN' || session.role == 'USER_TEMPLATE') { %>
+        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'USER_TEMPLATE') { %>
 
         <li class="nav-item">
             <a href="/templates" class="nav-link">
@@ -54,7 +54,7 @@
 
         <% } %>
 
-        <% if(session.role == 'ADMIN' || session.role == 'USER_OCR') { %>
+        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'USER_OCR') { %>
 
         <li class="nav-item">
             <a href="/ocrsessions" class="nav-link">
@@ -86,7 +86,7 @@
             </a>
         </li>
 
-        <% if(session.role == 'ADMIN') { %>
+        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN' ) { %>
         <li class="nav-item">
             <a href="/users" class="nav-link">
             <i class="nav-icon fas fa-columns"></i>

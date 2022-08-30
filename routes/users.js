@@ -32,7 +32,7 @@ router.get("/add", function(req, res){
   {
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "add-edit-user");
-    res.render(p, { session: req.session, user_id: null, profile: false, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), user_id: null, profile: false, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -47,7 +47,7 @@ router.get("/edit", function(req, res){
         console.log("here " + user_id)
         var dir = __dirname;
         var p = path.resolve( dir, "../public/pages/", "add-edit-user");
-        res.render(p, { session: req.session, user_id: user_id, profile: false, config: JSON.stringify(getConfig(req)) } )
+        res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), user_id: user_id, profile: false, config: JSON.stringify(getConfig(req)) } )
     }
 });
 
@@ -62,7 +62,7 @@ router.get("/profile", function(req, res){
       console.log("here " + user_id)
       var dir = __dirname;
       var p = path.resolve( dir, "../public/pages/", "add-edit-user");
-      res.render(p, { session: req.session, user_id: user_id, profile: true, config: JSON.stringify(getConfig(req)) } )
+      res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), user_id: user_id, profile: true, config: JSON.stringify(getConfig(req)) } )
   }
 });
 
@@ -76,7 +76,7 @@ router.get("/delete", function(req, res){
         let user_id = req.params.user_id
         var dir = __dirname;
         var p = path.resolve( dir, "../public/pages/", "delete-user");
-        res.render(p, { session: req.session, user_id: user_id, config: JSON.stringify(getConfig(req)) } )
+        res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), user_id: user_id, config: JSON.stringify(getConfig(req)) } )
     }
 });
 
@@ -91,7 +91,7 @@ router.get("", function(req, res){
     {
       var dir = __dirname;
       var p = path.resolve( dir, "../public/pages/", "users");
-      res.render(p, { session: req.session, config: JSON.stringify(getConfig(req)) } )
+      res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), config: JSON.stringify(getConfig(req)) } )
     }
 });
 
@@ -105,7 +105,7 @@ router.get("/view", function(req, res){
     let id = req.query.id;
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "detail-user");
-    res.render(p, { session: req.session, id: id, config: JSON.stringify(getConfig(req)) } )
+    res.render(p, { session: req.session, sessionstring: JSON.stringify(req.session), id: id, config: JSON.stringify(getConfig(req)) } )
   }
 });
 

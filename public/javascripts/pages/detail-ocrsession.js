@@ -280,7 +280,7 @@ export class DetailOcrSessionPage
             let rows = tableResult.result.positions;
             let img = tableResult.result.image;
 
-            $("#result-image").append("<a target='_blank' href='" + img  + "'>" + img + "</a>")
+            $("#result-image").append("<a target='_blank' href='" + img  + "'>View visualization</a>")
 
             let firstRow = rows[0];
             console.log("firstRow")
@@ -370,6 +370,7 @@ export class DetailOcrSessionPage
         console.log("url");
         console.log(url);
 
+        $("#processgif").show();
         $.get(url, function(response){
             console.log("response")
             console.log(response)
@@ -401,6 +402,7 @@ export class DetailOcrSessionPage
             //console.log(response)
             if(response.success != false)
             {
+                $("#processgif").hide();
                 clearInterval(me.interval)
                 window.open(url, "__blank")
             }

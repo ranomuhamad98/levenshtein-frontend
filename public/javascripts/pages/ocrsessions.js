@@ -3,10 +3,11 @@ import { GenericListPage } from "./genericlistpage.js";
 export class OcrSessionPage extends GenericListPage
 {
 
-    init(config)
+    init(config, session)
     {
         var me = this;
         super.init(config)
+        me.session = session;
 
         setInterval(function() {
             me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
@@ -39,6 +40,7 @@ export class OcrSessionPage extends GenericListPage
 
     initRows(rows)
     {
+        var me = this;
         for (var i =0; i < rows.length;i++)
         {
             if(rows[i].runningStatus == 0)
@@ -49,6 +51,9 @@ export class OcrSessionPage extends GenericListPage
                 rows[i].runningStatus = "<div style='color: #00cc00'>Finish</div><div style='text-decoration:underline; cursor:pointer' class='view-ocr-result' data='" + rows[i].id + "'>View Result</div>";
             if(rows[i].runningStatus == 3)
                 rows[i].runningStatus = "<div style='color: #FF0000'>Fail</div>";
+
+            if(me.session.role != "SUPER_ADMIN")
+                rows[i].delete = "<div></div>"
 
         }
 

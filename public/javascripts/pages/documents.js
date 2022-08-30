@@ -37,6 +37,7 @@ export class DocumentPage extends GenericListPage
 
         $("#btn-close-new-template").on('click', function(){
             $("#newTemplate").hide(500);
+            me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
         })
     }
 
@@ -46,6 +47,7 @@ export class DocumentPage extends GenericListPage
             { data: 'no' },
                 { data: 'filename'},
                 { data: 'upload_date' },
+                { data: 'updatedAt' },
                 { data: 'upload_by' },
                 { data: 'createTemplate' },
                 { data: 'process' }

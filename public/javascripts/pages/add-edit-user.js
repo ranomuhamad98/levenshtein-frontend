@@ -1,22 +1,20 @@
 export class AddEditUserPage
 {
-    init(config, user_id, profile)
+    init(config, user_id, profile, session)
     {
         var me = this;
         this.config = config;
         this.user_id = user_id;
+        me.session = session;
+        me.profile = profile
 
-        if(me.user_id != null)
-        {
-            me.getUserById(me.user_id).then((user)=>{
-                me.displayUser(user)
-            })
-        }
 
-        if(profile == "true")
+
+        if(profile == true)
         {
             $('#groupUserRole').css("display", 'none')
         }
+
 
         
         $("#btn-save-user").on("click", function(){
@@ -60,6 +58,24 @@ export class AddEditUserPage
             }
         })
 
+        if(me.user_id != null && me.user_id.length > 0)
+        {
+            me.getUserById(me.user_id).then((user)=>{
+                me.displayUser(user)
+            })
+        }
+        else 
+        {
+            $("#changePasswordCheckGroup").hide()
+            $("#changePassword").click();
+        }
+
+        
+        if(me.session.role == "SUPER_ADMIN")
+        {
+            $("#userRole").append("<option value='ADMIN'>ADMIN</option>")
+        }
+
     }
 
     getUserById(id)
@@ -96,7 +112,11 @@ export class AddEditUserPage
             user.confirmPassword = $("#confirmPassword").val();
         }
 
-        user.userRole = $("#userRole").val();
+        if(me.profile != true)
+        {
+            user.userRole = $("#userRole").val();
+        }
+            
         return user;
     }
 

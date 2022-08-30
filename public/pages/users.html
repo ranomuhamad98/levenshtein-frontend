@@ -13,7 +13,7 @@
             <!-- Main content -->
             <section class="content" style="padding: 20px">
                 <div style="padding: 0px; font-size: 1.5em">
-                    List of OCR Sessions
+                    List of Users
                 </div>
                 <div class="vertical-separator">
 
@@ -47,6 +47,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Role</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -82,8 +83,12 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let userPage = new UserPage();
-    userPage.init(config);
+    userPage.init(config, session);
 });
 </script>
 </html>

@@ -3,10 +3,11 @@ import { GenericListPage } from "./genericlistpage.js";
 export class UserPage extends GenericListPage
 {
 
-    init(config)
+    init(config, session)
     {
         var me = this;
         super.init(config)
+        me.session = session;
 
         me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
         me.initControls();
@@ -29,17 +30,24 @@ export class UserPage extends GenericListPage
             { data: 'no' },
             { data: 'firstname'},
             { data: 'email'},
+            { data: 'userRole'},
             { data: 'edit'}
         ]
     }
 
     initRows(rows)
     {
+        var me = this;
         for (var i =0; i < rows.length;i++)
         {
-
-            rows[i].edit = "<div style='text-decoration:underline; cursor:pointer' class='edit-user' data='" + rows[i].id + "'>Edit</div>";
-
+            if((rows[i].userRole != 'ADMIN' && rows[i].userRole != 'SUPER_ADMIN')  || ( rows[i].userRole == 'ADMIN' && me.session.role == 'SUPER_ADMIN' ))
+                rows[i].edit = "<div style='text-decoration:underline; cursor:pointer' class='edit-user' data='" + rows[i].id + "'>Edit</div>";
+            else 
+            {
+                rows[i].edit  = "<div></div>"
+                rows[i].delete  = "<div></div>"
+            }
+                
         }
 
         return rows;
