@@ -418,6 +418,19 @@ var TableResizer = {
             $("#tbl-container-" + tblId).css("z-index", 10)
 
         })
+
+        $("#" + tblId).off("mousedown");
+        $("#" + tblId).on("mousedown", function()
+        {
+            $(".tbldragger").css("opacity", ".2");
+            //$("#tbl-container-" + tblId).draggable();
+            $("#drag-" + tblId).css("opacity", "1");
+
+            $(".tblcontainer").css("z-index", 1);
+            TableResizer.selectedTableId = tblId;
+            $("#tbl-container-" + tblId).css("z-index", 10)
+
+        })
     
         $("#drag-" + tblId).off("mouseup");
         $("#drag-" + tblId).on("mouseup", function()
