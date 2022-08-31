@@ -726,6 +726,13 @@ var Page2 = {
     ,
     up: function(value)
     {
+        if(Page2.rotateRun)
+        {
+
+            Page2.rotateRun = false;
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+
+        }
         console.log("Up :  " + value)
         Page2.actions.push({ action: 'up(' + value + ')' })
 
@@ -751,6 +758,13 @@ var Page2 = {
     ,
     down: function(value)
     {
+        if(Page2.rotateRun)
+        {
+
+            Page2.rotateRun = false;
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+
+        }
         console.log("Down : " + value)
         Page2.actions.push({ action: 'down(' + value + ')' })
 
@@ -773,6 +787,13 @@ var Page2 = {
     ,
     left: function(value)
     {
+        if(Page2.rotateRun)
+        {
+
+            Page2.rotateRun = false;
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+
+        }
         var canvas=document.getElementById("pdf-canvas");
         var ctx=canvas.getContext("2d");
 
