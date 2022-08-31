@@ -136,7 +136,7 @@ router.post("/login", function(req, res){
     }
     else 
     {
-      res.send({ success: false, message: response.data.payload.message })
+      res.send({ success: false, message: "invalid email or password" })
     }
   })
 

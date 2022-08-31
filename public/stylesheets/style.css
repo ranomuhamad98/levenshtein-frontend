@@ -345,3 +345,17 @@ thead > tr {
 [class*=sidebar-dark-] .sidebar a {
   color: #ffffff;
 }
+
+#newTemplate
+{
+  width: 85%; 
+  height: 90%; position: absolute; top: 5%; left: 15%; background-color: rgb(255, 255, 255); z-index: 1000;padding: 20px;
+  display: none;
+  background-color: #ffffff;
+  border: solid 0px #ccc;
+  border-radius: 15px;
+
+  box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+}

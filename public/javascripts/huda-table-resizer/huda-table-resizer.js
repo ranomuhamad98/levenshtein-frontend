@@ -522,6 +522,8 @@ var TableResizer = {
         $(tableContainer).append(moverDiv);
         $(tableContainer).append(tbl);
         $("#" + divId).append(tableContainer);
+
+        $("#tbl-container-" + tblId).css("z-index", 11)
     
         $("#" + tblId + " th").html(TableResizer.getThContent())        
         $("#" + tblId + " td").html(TableResizer.getTdContent())
@@ -638,9 +640,14 @@ var TableResizer = {
             let containerId = "tbl-container-" + tableId + "";
 
             var tableContainer = $("#" + containerId)   [0];
-            let tableHeight = $("#" + tableId).height();
-            let tableWidth = $("#" + tableId).width();
-            let containerHeight = $(tableContainer).height();
+            //let tableHeight = $("#" + tableId).height();
+            //let tableWidth = $("#" + tableId).width();
+            //let containerHeight = $(tableContainer).height();
+
+            let tableHeight = parseFloat($("#" + tableId).css("height"));
+            let tableWidth = parseFloat($("#" + tableId).css("width"));
+            let containerHeight = parseFloat($(tableContainer).css("height"));
+
             let deltaheight  = containerHeight - tableHeight;
 
             let posY = parseFloat($(tableContainer).position().top) + deltaheight;

@@ -8,6 +8,11 @@ var Page2 = {
     TABLELEFT:207,
     TABLETOP:586,
     IMAGES: [],
+    imageInProcess: null,
+    rotation: 0,
+    translation: 0,
+    actions: [],
+    rotateRun: false,
     ocr: function(page, callback)
     {
         console.log("OCR")
@@ -30,6 +35,22 @@ var Page2 = {
                 callback();
 
         })
+    }
+    ,
+    tooltips: function()
+    {
+        //console.log($("button[tooltip]"))
+        $("button[tooltip]").each(function (idx)
+        {   
+            let tooltip = $(this).attr("tooltip")
+            console.log("tooltip")
+            console.log(tooltip)
+            tippy(this, {
+                content: tooltip,
+              });      
+
+        })
+
     }
     ,
     toTable: function(data)
@@ -548,6 +569,8 @@ var Page2 = {
     openPage: function(pdf, pageNumber, callback)
     {
 
+        Page2.actions = [];
+        Page2.imageInProcess = null;
         $("#processgif").show();
         
         // Fetch the first page
@@ -643,7 +666,113 @@ var Page2 = {
     ,
     rotate: function(degrees)
     {
+        Page2.rotateRun = true;
+        Page2.actions.push({ action: 'rotate(' + degrees + ')' })
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
 
+        var image = document.createElement("img");
+        image.id = "pic";
+
+        if(Page2.imageInProcess == null)
+        {
+            console.log("here rotate")
+            image.src = canvas.toDataURL("image/png");
+            Page2.imageInProcess = image.src;
+        }
+        else
+        {
+            console.log("here else rotate")
+            image.src = Page2.imageInProcess;
+        }
+        
+        degrees = Page2.rotation + degrees
+        Page2.rotation = degrees
+
+        image.onload = function()
+        {
+            console.log('xxxxx')
+            console.log(image.height)
+
+    
+            if(degrees == 90 || degrees == 270) {
+                canvas.width = image.height;
+                canvas.height = image.width;
+            } else {
+                canvas.width = image.width;
+                canvas.height = image.height;
+            }
+
+            console.log('yyyyyy')
+    
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            if(degrees == 90 || degrees == 270) {
+                ctx.translate(Math.floor(image.height/2),Math.floor(image.width/2));
+            } else {
+                ctx.translate(Math.floor(image.width/2),Math.floor(image.height/2));
+            }   
+            ctx.rotate(degrees*Math.PI/180);
+            console.log('zzzzzzz')
+            ctx.drawImage(image,-image.width/2,-image.height/2);
+    
+            console.log('aaaaaaa')
+            //let elm = document.getElementById("right-displayer")
+            //elm.insertBefore(canvas, elm.firstChild );
+
+            Page2.saveDisplayedImage();
+        }
+    }
+    ,
+    up: function(value)
+    {
+        console.log("Up :  " + value)
+        Page2.actions.push({ action: 'up(' + value + ')' })
+
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL("image/png");
+
+        image.onload = function()
+        {
+            console.log('here') 
+
+            ctx.drawImage(image, 0, -value);
+            Page2.imageInProcess = image.src;
+            Page2.saveDisplayedImage();
+        }
+
+        Page2.rotateRun = false;
+
+    }
+    ,
+    down: function(value)
+    {
+        console.log("Down : " + value)
+        Page2.actions.push({ action: 'down(' + value + ')' })
+
+        var canvas=document.getElementById("pdf-canvas");
+        var ctx=canvas.getContext("2d");
+
+        var image = document.createElement("img");
+        image.id = "pic";
+        image.src = canvas.toDataURL("image/png")
+
+        image.onload = function()
+        {
+            console.log('here')
+            ctx.drawImage(image, 0,value);
+            Page2.imageInProcess = image.src;
+            Page2.saveDisplayedImage();
+        }
+        Page2.rotateRun = false;
+    }
+    ,
+    left: function(value)
+    {
         var canvas=document.getElementById("pdf-canvas");
         var ctx=canvas.getContext("2d");
 
@@ -655,100 +784,29 @@ var Page2 = {
         {
             console.log('here')
             console.log(image.height)
-
-    
-            if(degrees == 90 || degrees == 270) {
-                canvas.width = image.height;
-                canvas.height = image.width;
-            } else {
-                canvas.width = image.width;
-                canvas.height = image.height;
-            }
-    
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            if(degrees == 90 || degrees == 270) {
-                ctx.translate(image.height/2,image.width/2);
-            } else {
-                ctx.translate(image.width/2,image.height/2);
-            }   
-            ctx.rotate(degrees*Math.PI/180);
-            ctx.drawImage(image,-image.width/2,-image.height/2);
-    
-            //let elm = document.getElementById("right-displayer")
-            //elm.insertBefore(canvas, elm.firstChild );
-
-            Page2.saveDisplayedImage();
-        }
-    }
-    ,
-    up: function(value)
-    {
-        var canvas=document.getElementById("pdf-canvas");
-        var ctx=canvas.getContext("2d");
-
-        var image = document.createElement("img");
-        image.id = "pic";
-        image.src = canvas.toDataURL();
-
-        image.onload = function()
-        {
-            console.log('here')
-            console.log(image.height)
-
-            ctx.drawImage(image, 0,-value);
-            Page2.saveDisplayedImage();
-        }
-
-    }
-    ,
-    down: function(value)
-    {
-        var canvas=document.getElementById("pdf-canvas");
-        var ctx=canvas.getContext("2d");
-
-        var image = document.createElement("img");
-        image.id = "pic";
-        image.src = canvas.toDataURL();
-
-        image.onload = function()
-        {
-            console.log('here')
-            console.log(image.height)
-            
-            ctx.drawImage(image, 0,value);
-            Page2.saveDisplayedImage();
-        }
-
-    }
-    ,
-    left: function(value)
-    {
-        var canvas=document.getElementById("pdf-canvas");
-        var ctx=canvas.getContext("2d");
-
-        var image = document.createElement("img");
-        image.id = "pic";
-        image.src = canvas.toDataURL();
-
-        image.onload = function()
-        {
-            console.log('here')
-            console.log(image.height)
             
             ctx.drawImage(image, -value,0);
+            Page2.imageInProcess = image.src;
             Page2.saveDisplayedImage();
         }
-
+        Page2.rotateRun = false;
     }
     ,
     right: function(value)
     {
+        if(Page2.rotateRun)
+        {
+
+            Page2.rotateRun = false;
+            Page2.openPage(Page2.PDF, Page2.CUR_PAGE);
+
+        }
         var canvas=document.getElementById("pdf-canvas");
         var ctx=canvas.getContext("2d");
 
         var image = document.createElement("img");
         image.id = "pic";
-        image.src = canvas.toDataURL();
+        image.src = canvas.toDataURL("image/png");
 
         image.onload = function()
         {
@@ -756,9 +814,10 @@ var Page2 = {
             console.log(image.height)
             
             ctx.drawImage(image, value,0);
+            Page2.imageInProcess = image.src;
             Page2.saveDisplayedImage();
         }
-
+        
     }
     ,
     retrieveResultJson: function( callback, callbackError)

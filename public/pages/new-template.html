@@ -12,6 +12,9 @@
 
 <script src="../javascripts/pages/page2.js"></script>
 
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
 </head>
 <body>
     <div>
@@ -29,53 +32,53 @@
         <div style="width: 1px;"></div>
         <div style="width: 100%; display: inline-flex;">
             <div class="btn-container" style="display: flex">
-                <button id="btn-create-form" type="button" class="btn btn-primary">
+                <button id="btn-create-form" tooltip="Add Form Guideline" type="button" class="btn btn-primary">
                     <img src="../images/white-forms.png" alt="Add Guideline form">
                 </button>
-                <button id="btn-create-table" type="button" class="btn btn-primary">
+                <button id="btn-create-table" tooltip="Add Table Guideline" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-tables.png">
                     
                 </button>
-                <button id="btn-clear-selected" type="button" class="btn btn-primary">
+                <button id="btn-clear-selected" tooltip="Remove Selected" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-remove-selection.png">
                 
                 </button>
-                <button id="btn-clear-table" type="button" class="btn btn-primary">
+                <button id="btn-clear-table"  tooltip="Clear All" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-clear.png">
                 
                 </button>
 
-                <button id="btn-rotate-counterclockwise" type="button" class="btn btn-primary">
+                <button id="btn-rotate-counterclockwise"  tooltip="Rotate Left" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-counterclockwise.png">
                 
                 </button>
-                <button id="btn-rotate-clockwise" type="button" class="btn btn-primary">
+                <button id="btn-rotate-clockwise"  tooltip="Rotate Right" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-clockwise.png">
                 
                 </button>
 
 
-                <button id="btn-up" type="button" class="btn btn-primary">
+                <button id="btn-up" type="button" tooltip="Move Up" class="btn btn-primary">
                     
                     <img src="../images/white-up.png">
                 
                 </button>
-                <button id="btn-down" type="button" class="btn btn-primary">
+                <button id="btn-down"  tooltip="Move Down" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-down.png">
                 
                 </button>
-                <button id="btn-left" type="button" class="btn btn-primary">
+                <button id="btn-left" tooltip="Move Left" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-left.png">
                 
                 </button>
-                <button id="btn-right" type="button" class="btn btn-primary">
+                <button id="btn-right" tooltip="Move Right" type="button" class="btn btn-primary">
                     
                     <img src="../images/white-right.png">
                 
@@ -96,24 +99,24 @@
                 </div>
             </div>
             <div class="btn-container" style="display: flex">
-                <button id="btn-save-template" type="button" class="btn btn-primary">
+                <button id="btn-save-template"  tooltip="Update Template" type="button" class="btn btn-primary">
                     
-                        Update Template&nbsp;
-                    
-                </button>
-                <button id="btn-save-new-template" type="button" class="btn btn-primary">
-                    
-                        Save as New  Template&nbsp;
+                    <img src="../images/white_update_template.png">
                     
                 </button>
-                <button id="btn-delete-template" type="button" class="btn btn-primary">
+                <button id="btn-save-new-template" tooltip="Save As New Template" type="button" class="btn btn-primary">
                     
-                        Delete  Template &nbsp;
+                    <img src="../images/white_new_template.png">
                     
                 </button>
-                <button id="btn-save-page-template" type="button" class="btn btn-primary">
+                <button id="btn-delete-template" tooltip="Delete Template" type="button" class="btn btn-primary">
                     
-                    Save Page  Template &nbsp;
+                    <img src="../images/white_delete_template.png">
+                    
+                </button>
+                <button id="btn-save-page-template" tooltip="Save Page Template" type="button" class="btn btn-primary">
+                    
+                    <img src="../images/white_save_page.png">
                 
             </button>
             </div>
@@ -223,6 +226,7 @@
         if(Page2.viewMode == "CREATE_TEMPLATE")
         {
         
+            Page2.tooltips();
             $("#btn-back").on("click", function(){
                 location = "/web";
             });
@@ -383,27 +387,27 @@
             })
 
             $("#btn-rotate-clockwise").on("click", function(){
-                Page2.rotate(0.1);
+                Page2.rotate(0.3);
             })
 
             $("#btn-rotate-counterclockwise").on("click", function(){
-                Page2.rotate(-0.1);
+                Page2.rotate(-0.3);
             })
             
             $("#btn-up").on("click", function(){
-                Page2.up(1);
+                Page2.up(2);
             })
 
             $("#btn-down").on("click", function(){
-                Page2.down(1);
+                Page2.down(2);
             })
 
             $("#btn-left").on("click", function(){
-                Page2.left(1);
+                Page2.left(2);
             })
 
             $("#btn-right").on("click", function(){
-                Page2.right(1);
+                Page2.right(2);
             })
         }
 
