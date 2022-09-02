@@ -221,7 +221,7 @@ export class DetailOcrSessionPage
     {
         let ocrResult = me.getOcrResultByPage(me, page)
         let formOcrResult = ocrResult.allResults.formOcrResult.positions;
-        $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>" + ocrResult.allResults.formOcrResult.image + "</a>")
+        $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>View Visualization</a>")
 
 
         console.log(formOcrResult)
