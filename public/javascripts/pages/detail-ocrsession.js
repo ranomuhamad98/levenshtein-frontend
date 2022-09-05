@@ -6,29 +6,40 @@ export class DetailOcrSessionPage
         this.config = config;
         this.id = id;
 
-        this.getSession(this.id, { success: function(session){
+        this.initnext(me, function(mem){
+
+            mem.initCmbPage(mem)
+            mem.initEvents(mem);
+        })
+        
+    }
+
+    initnext(me, callback)
+    {
+        me.getSession(me.id, { success: function(session){
             me.ocrSession = session;
 
             let ocrResults = me.ocrSession.ocrResult;
-            ocrResults = atob(ocrResults);
+            //console.log(ocrResults)
+            ocrResults = Base64.decode(ocrResults);
             ocrResults = JSON.parse(ocrResults)
+            
+
             me.ocrResults = ocrResults;
         
             me.displayOcrSession(me, session)
 
-            me.initCmbPage(me)
-            me.initEvents(me);
+            if(callback != null)
+                callback(me)
+
 
         }, error: null });
-
-
-
-        
     }
 
     initCmbPage(me)
     {
         let cmb = $("#cmb-page")        
+        $(cmb).html("")
         let totalPage  = me.getTotalPages(me);
         for(let i = 0; i < totalPage; i++)
         {
@@ -42,24 +53,35 @@ export class DetailOcrSessionPage
 
     initEvents(me)
     {
+        $("input[name='displayType']").off("click")
         $("input[name='displayType']").on("click", function(){
             me.onChangeEvent(me)
         });
 
+        //$("#cmb-page").off("change")
         $("#cmb-page").on("change", function(){
             me.onChangeEvent(me)
         });
 
+        $("#btn-save-changes").off("click")
         $("#btn-save-changes").on("click", function(){
             me.saveChanges(me)
         });
 
+        $("#btn-download-result").off("click")
         $("#btn-download-result").on("click", function(){
             me.downloadOcrResult(me)
         });
 
+        $("#btn-cancel-session").off("click")
         $("#btn-cancel-session").on("click", function(){
             location = "/ocrsessions"
+        });
+
+
+        $("#btn-rerun-ocr").off("click")
+        $("#btn-rerun-ocr").on("click", function(){
+            me.reRunOcr(me)
         });
         
         //$("input[name='displayType']").val("form")
@@ -96,6 +118,34 @@ export class DetailOcrSessionPage
             }
         })
         
+    }
+
+    reRunOcr(me)
+    {
+        let sessionID = me.ocrSession.sessionID;
+        let page = $("#cmb-page").val();
+        let url = me.config.LEVENSHTEIN_API + "/ocrsessions/run-ocr-session/" + sessionID + "/" + page;
+        $("#processgif").show();
+        console.log('rerunocr')
+        console.log(url)
+        $.get(url, function(response){
+            console.log("rerunocr response")
+            console.log(response)
+            if(response.success)
+            {
+                $.notify("OCR is successful", "success")
+                me.initnext(me, function(){
+                    me.onChangeEvent(me)
+                })
+            }
+            else 
+            {
+                $.notify("Error " + response.message, "error")
+            }
+            $("#processgif").hide(); 
+        } )
+
+
     }
 
     getTotalPages(me)
@@ -209,6 +259,9 @@ export class DetailOcrSessionPage
     getOcrResultByPage(me, page)
     {
 
+        console.log("me.ocrResults")
+        console.log(me.ocrResults)
+
         let result = null;
         me.ocrResults.map((ocrResult)=>{
             if(ocrResult.page == page)
@@ -220,6 +273,8 @@ export class DetailOcrSessionPage
     createFormDisplay(me, page)
     {
         let ocrResult = me.getOcrResultByPage(me, page)
+        console.log("createFormDisplay.ocrResult")
+        console.log(ocrResult)
         let formOcrResult = ocrResult.allResults.formOcrResult.positions;
         $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>View Visualization</a>")
 
@@ -272,48 +327,51 @@ export class DetailOcrSessionPage
         
         tableOcrResult.map((tableResult)=>{
 
-            let tbl = document.createElement("table");
-            $(tbl).attr("style", "width: 100%; border: solid 1px #ccc");
-            $(tbl).attr("id", tableResult.tableID)
-            $(tbl).attr("type", "table")
+            if(tableResult.result != null)
+            {
+                let tbl = document.createElement("table");
+                $(tbl).attr("style", "width: 100%; border: solid 1px #ccc");
+                $(tbl).attr("id", tableResult.tableID)
+                $(tbl).attr("type", "table")
 
-            let rows = tableResult.result.positions;
-            let img = tableResult.result.image;
+                let rows = tableResult.result.positions;
+                let img = tableResult.result.image;
 
-            $("#result-image").append("<a target='_blank' href='" + img  + "'>View visualization</a>")
+                $("#result-image").append("<a target='_blank' href='" + img  + "'>View visualization</a>")
 
-            let firstRow = rows[0];
-            console.log("firstRow")
-            console.log(firstRow)
-
-            let tr = document.createElement("tr");
-            //create table header
-            firstRow.map((cell)=>{
-                let td = document.createElement("td");
-                $(td).attr("style", "border: solid 1px #ccc; font-weight: bold")
-                $(td).attr("fieldname", cell.fieldname)
-                $(td).html(cell.fieldname);
-                $(tr).append(td);
-            })
-
-            $(tbl).append(tr);
-
-            //Create table content
-            rows.map((row)=>{
+                let firstRow = rows[0];
+                console.log("firstRow")
+                console.log(firstRow)
 
                 let tr = document.createElement("tr");
-                row.map((cell)=>{
-
+                //create table header
+                firstRow.map((cell)=>{
                     let td = document.createElement("td");
-                    $(td).attr("style", "border: solid 1px #ccc;")
+                    $(td).attr("style", "border: solid 1px #ccc; font-weight: bold")
                     $(td).attr("fieldname", cell.fieldname)
-                    $(td).html(cell.text);
+                    $(td).html(cell.fieldname);
                     $(tr).append(td);
                 })
-                $(tbl).append(tr);
-            })
 
-            tables.push(tbl)
+                $(tbl).append(tr);
+
+                //Create table content
+                rows.map((row)=>{
+
+                    let tr = document.createElement("tr");
+                    row.map((cell)=>{
+
+                        let td = document.createElement("td");
+                        $(td).attr("style", "border: solid 1px #ccc;")
+                        $(td).attr("fieldname", cell.fieldname)
+                        $(td).html(cell.text);
+                        $(tr).append(td);
+                    })
+                    $(tbl).append(tr);
+                })
+
+                tables.push(tbl)
+            }
         })
 
 
