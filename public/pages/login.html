@@ -122,6 +122,20 @@
         config = config.replace(/&#34;/gi, '"')
         config = JSON.parse(config)
 
+        $("#email").focus();
+
+        
+        $("#userPassword").on("keypress", function(e){
+            if(e.which == 13) {
+                $("#btn-login").click()
+            }
+        })
+
+        $("#email").on("keypress", function(e){
+            if(e.which == 13) {
+                $("#userPassword").focus()
+            }
+        })
         $("#btn-login").on("click", function(){
             let email = $("#email").val();
             let password = $("#userPassword").val();
