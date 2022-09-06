@@ -187,6 +187,19 @@
         
     $(document).ready(function()
     {
+        var session = "<%=sessionstring %>"
+        session = session.replace(/&#34;/gi, '"')
+        session = JSON.parse(session)
+
+        console.log(session)
+        if(session.role != "SUPER_ADMIN")
+        {
+            $("#btn-save-template").hide();
+            $("#btn-save-new-template").hide();
+            $("#btn-delete-template").hide();
+            $("#btn-save-new-template").hide();
+        }
+
         Page2.PROJECT = "<%=config.PROJECT %>";
         Page2.GCS_UPLOAD_BUCKET = "<%=config.GCS_UPLOAD_BUCKET %>";
         Page2.GCS_PDF_FOLDER = "<%=config.GCS_PDF_FOLDER %>";

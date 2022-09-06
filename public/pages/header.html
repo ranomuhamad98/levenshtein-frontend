@@ -38,6 +38,7 @@
             with font-awesome or any other icon font library -->
     
         <li class="nav-header">PARSER</li>
+        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'OCR_USER') { %>
         <li class="nav-item">
             <a href="/documents" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
@@ -46,7 +47,10 @@
             </p>
             </a>
         </li>
-        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'USER_TEMPLATE') { %>
+
+        <% } %>
+
+        <% if(session.role == 'SUPER_ADMIN') { %>
 
         <li class="nav-item">
             <a href="/templates" class="nav-link">
@@ -59,7 +63,7 @@
 
         <% } %>
 
-        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'USER_OCR') { %>
+        <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'OCR_USER') { %>
 
         <li class="nav-item">
             <a href="/ocrsessions" class="nav-link">
