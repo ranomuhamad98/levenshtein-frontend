@@ -382,9 +382,11 @@ export class DetailOcrSessionPage
     {
         let page  = $("#cmb-page").val();
         let ocrResult = me.getOcrResultByPage(me, page)
+        console.log("ocrResult")
+        console.log(ocrResult)
         let formOcrResult = ocrResult.allResults.formOcrResult;
 
-        formOcrResult.map((form)=>{
+        formOcrResult.positions.map((form)=>{
             if(form.fieldname == fieldname)
             {
                 form.text = value;
@@ -409,7 +411,7 @@ export class DetailOcrSessionPage
             tableOcrResult.map((tableResult)=>{
                 if(tableResult.tableID == tableID)
                 {
-                    tableResult.result[roworiginal][col].text = value;
+                    tableResult.result.positions[roworiginal][col].text = value;
                 }
             })
 

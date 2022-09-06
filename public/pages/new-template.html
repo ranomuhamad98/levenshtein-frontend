@@ -300,7 +300,7 @@
                 //TableResizer.createResizedTable("divPdfTable", 5, 5);
                 Page2.autoDetect();
             })
-        
+              
             $("#btn-create-table").on("click", function(){
                 TableResizer.createResizedTable("divPdfTable", 7, 1, true, { type: 'table'}, null, Page2.onTableCellClick);
             })
@@ -387,11 +387,11 @@
             })
 
             $("#btn-rotate-clockwise").on("click", function(){
-                Page2.rotate(0.3);
+                Page2.rotate(0.1);
             })
 
             $("#btn-rotate-counterclockwise").on("click", function(){
-                Page2.rotate(-0.3);
+                Page2.rotate(-0.1);
             })
             
             $("#btn-up").on("click", function(){
