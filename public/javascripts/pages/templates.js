@@ -12,6 +12,20 @@ export class TemplatePage extends GenericListPage
         return "documentlist";
     }
 
+
+    initRows(rows)
+    {
+        var me = this;
+        for (var i =0; i < rows.length;i++)
+        {
+
+            rows[i].createdAt = moment(rows[i].createdAt).format("DD-MM-YYYY hh:mm:ss")
+
+        }
+
+        return rows;
+    }
+
     getColumns()
     {
         return [

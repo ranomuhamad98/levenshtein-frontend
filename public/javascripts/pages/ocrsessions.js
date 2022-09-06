@@ -55,6 +55,9 @@ export class OcrSessionPage extends GenericListPage
             if(me.session.role != "SUPER_ADMIN")
                 rows[i].delete = "<div></div>"
 
+            rows[i].sessionStartDate = moment(rows[i].sessionStartDate).format("DD-MM-YYYY hh:mm:ss")
+            rows[i].sessionEndDate = moment(rows[i].sessionEndDate).format("DD-MM-YYYY hh:mm:ss")
+
         }
 
         return rows;
