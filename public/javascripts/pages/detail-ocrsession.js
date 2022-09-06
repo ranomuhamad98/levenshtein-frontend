@@ -18,8 +18,9 @@ export class DetailOcrSessionPage
     {
         me.getSession(me.id, { success: function(session){
             me.ocrSession = session;
-            me.ocrSession.sessionStartDate = moment(me.ocrSession.sessionStartDate).format('DD-MM-YYYY hh:mm:ss')
-            me.ocrSession.sessionEndDate = moment(me.ocrSession.sessionEndDate).format('DD-MM-YYYY hh:mm:ss')
+            console.log('getsession done')
+            me.ocrSession.sessionStartDate = moment(me.ocrSession.sessionStartDate).format('DD-MM-YYYY HH:mm:ss')
+            me.ocrSession.sessionEndDate = moment(me.ocrSession.sessionEndDate).format('DD-MM-YYYY HH:mm:ss')
 
 
             let ocrResults = me.ocrSession.ocrResult;

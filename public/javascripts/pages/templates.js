@@ -16,10 +16,12 @@ export class TemplatePage extends GenericListPage
     initRows(rows)
     {
         var me = this;
+        console.log('initrows')
         for (var i =0; i < rows.length;i++)
         {
 
-            rows[i].createdAt = moment(rows[i].createdAt).format("DD-MM-YYYY hh:mm:ss")
+            
+            rows[i].createdAt = moment(rows[i].createdAt).format("DD-MM-YYYY HH:mm:ss")
 
         }
 

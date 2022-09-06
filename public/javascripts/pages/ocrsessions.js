@@ -41,6 +41,7 @@ export class OcrSessionPage extends GenericListPage
     initRows(rows)
     {
         var me = this;
+        console.log('initrows')
         for (var i =0; i < rows.length;i++)
         {
             if(rows[i].runningStatus == 0)
@@ -55,8 +56,8 @@ export class OcrSessionPage extends GenericListPage
             if(me.session.role != "SUPER_ADMIN")
                 rows[i].delete = "<div></div>"
 
-            rows[i].sessionStartDate = moment(rows[i].sessionStartDate).format("DD-MM-YYYY hh:mm:ss")
-            rows[i].sessionEndDate = moment(rows[i].sessionEndDate).format("DD-MM-YYYY hh:mm:ss")
+            rows[i].sessionStartDate = moment(rows[i].sessionStartDate).format("DD-MM-YYYY HH:mm:ss")
+            rows[i].sessionEndDate = moment(rows[i].sessionEndDate).format("DD-MM-YYYY HH:mm:ss")
 
         }
 

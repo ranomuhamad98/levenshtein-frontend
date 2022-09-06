@@ -18,8 +18,9 @@ export class DocumentPage extends GenericListPage
         {
             rows[i].createTemplate = "<div class='row-menu row-create-template' data='" + rows[i].filename + "'>Create Template</div>"
             rows[i].process = "<div class='row-menu row-ocr'  data='" + rows[i].id + "'>OCR</div>"
-            rows[i].upload_date = moment(rows[i].upload_date).format("DD-MM-YYYY hh:mm:ss")
-            rows[i].updatedAt = moment(rows[i].updatedAt).format("DD-MM-YYYY hh:mm:ss")
+            console.log('initrows')
+            rows[i].upload_date = moment(rows[i].upload_date).format("DD-MM-YYYY HH:mm:ss")
+            rows[i].updatedAt = moment(rows[i].updatedAt).format("DD-MM-YYYY HH:mm:ss")
         }
         return rows;
     }
