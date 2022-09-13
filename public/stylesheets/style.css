@@ -333,6 +333,13 @@ thead > tr {
   color: #fff !important;
 }
 
+.nav-link-selected
+{
+  color: #3366ff !important;
+  display: block;
+  padding: 0.5rem 1rem;
+}
+
 [class*=sidebar-dark] .user-panel {
   border-bottom: 0px solid #ffffff;
 }

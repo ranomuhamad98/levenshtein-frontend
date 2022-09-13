@@ -18,11 +18,21 @@ export class GenericListPage {
         return "documentlist";
     }
 
-    init(config)
+    init(config, session)
     {
         var me  = this;
         me.config = config;
+        me.session = session;
+
+        console.log(me.session)
         let scrpt = me.getApiScript();
+
+        //$("li#" + me.session.activeLink + " a").removeClass("nav-link")
+        $("li#" + me.session.activeLink + " > a > p").css("color", "#cc5522")
+
+
+        console.log($("li#" + me.session.activeLink + " a"))
+        //$("li[id='" + session.activeLink + "'] a").css("color", "#006699")
 
         $.getScript(scrpt[0], 
             function() {

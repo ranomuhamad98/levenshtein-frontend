@@ -58,10 +58,14 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let documentid = "<%=documentid %>";
 
     let addOcrSessionPage = new AddOcrSessionPage();
-    addOcrSessionPage.init(config, documentid);
+    addOcrSessionPage.init(config, documentid, session);
 });
 </script>
 </html>

@@ -6,7 +6,7 @@ export class UserPage extends GenericListPage
     init(config, session)
     {
         var me = this;
-        super.init(config)
+        super.init(config, session)
         me.session = session;
 
         me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )

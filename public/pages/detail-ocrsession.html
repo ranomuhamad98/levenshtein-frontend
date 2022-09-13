@@ -128,10 +128,14 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let id = "<%=id %>";
 
     let detailOcrSessionPage = new DetailOcrSessionPage();
-    detailOcrSessionPage.init(config, id);
+    detailOcrSessionPage.init(config, id, session);
 });
 </script>
 </html>

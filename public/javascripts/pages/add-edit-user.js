@@ -8,6 +8,7 @@ export class AddEditUserPage
         me.session = session;
         me.profile = profile
 
+        $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
 
 
         if(profile == true)

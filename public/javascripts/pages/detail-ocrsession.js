@@ -1,10 +1,12 @@
 export class DetailOcrSessionPage
 {
-    init(config, id)
+    init(config, id, session)
     {
         var me = this;
         this.config = config;
         this.id = id;
+
+        $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
 
         this.initnext(me, function(mem){
 

@@ -154,9 +154,13 @@ var onAllFileUploaded = null;
         var config = "<%=config %>";
         config = config.replace(/&#34;/gi, '"')
         config = JSON.parse(config)
+
+        var session = "<%=sessionstring %>"
+        session = session.replace(/&#34;/gi, '"')
+        session = JSON.parse(session)
         
         let documentUploadPage = new DocumentUploadPage();
-        documentUploadPage.init(config);
+        documentUploadPage.init(config, session);
 
         onFileUploaded = function(response){ documentUploadPage.onUploadDone(response) } ;
         onAllFileUploaded = function(){ documentUploadPage.onAllFileUploaded() }; 

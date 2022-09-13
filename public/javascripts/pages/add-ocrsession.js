@@ -1,10 +1,13 @@
 export class AddOcrSessionPage
 {
-    init(config, documentid)
+    init(config, documentid, session)
     {
         var me = this;
         this.config = config;
         this.documentid = documentid;
+
+        $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
+
 
         me.getDocumentById(documentid).then((document)=>{
             me.document = document.filename.replace("gs://", "https://storage.googleapis.com/");

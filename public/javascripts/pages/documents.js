@@ -27,6 +27,7 @@ export class DocumentPage extends GenericListPage
 
     initEvents()
     {
+        
         var me = this;
         $(".row-create-template").on('click', function(){
             let data = $(this).attr("data")

@@ -81,8 +81,12 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let templatePage = new TemplatePage();
-    templatePage.init(config);
+    templatePage.init(config, session);
 });
 </script>
 </html>

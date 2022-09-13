@@ -1,8 +1,12 @@
 export class DocumentUploadPage
 {
-    init(config)
+    init(config, session)
     {
         this.config = config;
+
+        $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
+
+
         console.log(this.config)
         $("#btn-clear").click(function(){
             Dropzone.forElement('#myDropzone').removeAllFiles(true)

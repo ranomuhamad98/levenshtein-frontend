@@ -6,7 +6,7 @@ export class OcrSessionPage extends GenericListPage
     init(config, session)
     {
         var me = this;
-        super.init(config)
+        super.init(config, session)
         me.session = session;
 
         setInterval(function() {

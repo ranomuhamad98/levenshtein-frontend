@@ -39,7 +39,7 @@
     
         <li class="nav-header">PARSER</li>
         <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'OCR_USER') { %>
-        <li class="nav-item">
+        <li class="nav-item" id="documents">
             <a href="/documents" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
             <p>
@@ -52,7 +52,7 @@
 
         <% if(session.role == 'SUPER_ADMIN') { %>
 
-        <li class="nav-item">
+        <li class="nav-item" id="templates">
             <a href="/templates" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
@@ -65,7 +65,7 @@
 
         <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'OCR_USER') { %>
 
-        <li class="nav-item">
+        <li class="nav-item" id="ocrsessions">
             <a href="/ocrsessions" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
@@ -86,7 +86,7 @@
             </p>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="profile">
             <a href="/users/profile" class="nav-link">
             <i class="nav-icon far fa-image"></i>
             <p>
@@ -96,7 +96,7 @@
         </li>
 
         <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN' ) { %>
-        <li class="nav-item">
+        <li class="nav-item" id="users">
             <a href="/users" class="nav-link">
             <i class="nav-icon fas fa-columns"></i>
             <p>

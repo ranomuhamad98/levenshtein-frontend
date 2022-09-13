@@ -101,8 +101,12 @@ $(document).ready(function () {
         config = JSON.parse(config)
     console.log(config)
 
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
     let documentPage = new DocumentPage();
-    documentPage.init(config);
+    documentPage.init(config, session);
 });
 </script>
 </html>
