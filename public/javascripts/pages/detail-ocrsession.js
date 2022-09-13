@@ -19,8 +19,9 @@ export class DetailOcrSessionPage
         me.getSession(me.id, { success: function(session){
             me.ocrSession = session;
             console.log('getsession done')
-            me.ocrSession.sessionStartDate = moment(me.ocrSession.sessionStartDate).format('DD-MM-YYYY HH:mm:ss')
-            me.ocrSession.sessionEndDate = moment(me.ocrSession.sessionEndDate).format('DD-MM-YYYY HH:mm:ss')
+
+            me.ocrSession.sessionStartDateDisplay = moment(me.ocrSession.sessionStartDate).format('DD-MM-YYYY HH:mm:ss')
+            me.ocrSession.sessionEndDateDisplay = moment(me.ocrSession.sessionEndDate).format('DD-MM-YYYY HH:mm:ss')
 
 
             let ocrResults = me.ocrSession.ocrResult;
@@ -108,10 +109,15 @@ export class DetailOcrSessionPage
 
         console.log(me.ocrSession)
 
+
         
         let id = me.ocrSession.id;
         let url = this.config.LEVENSHTEIN_API + "/ocrsessions/update/" + id;
         $.post(url, JSON.stringify( me.ocrSession), function (response){
+
+            console.log("RESPONSE from " + url)
+            console.log(response)
+
             if(response.success)
             {
                 $.notify("Changes are saved", "success")
@@ -187,8 +193,8 @@ export class DetailOcrSessionPage
     displayOcrSession(me, session)
     {
         $("#sessionID").html(session.sessionID)
-        $("#sessionStartDate").html(session.sessionStartDate)
-        $("#sessionEndDate").html(session.sessionEndDate)
+        $("#sessionStartDate").html(session.sessionStartDateDisplay)
+        $("#sessionEndDate").html(session.sessionEndDateDisplay)
         $("#runningStatus").html(runningStatus)
         $("#document").html(session.document)
         $("#runningStatus").html(me.getSessionStatusName(session.runningStatus));
