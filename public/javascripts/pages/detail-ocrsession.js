@@ -8,6 +8,8 @@ export class DetailOcrSessionPage
 
         $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
 
+        $("#btn-rerun-ocr").hide();
+
         this.initnext(me, function(mem){
 
             mem.initCmbPage(mem)
@@ -293,6 +295,15 @@ export class DetailOcrSessionPage
 
         console.log(formOcrResult)
 
+        if(formOcrResult == null)
+        {
+            $("#btn-rerun-ocr").show()
+        }
+        else 
+        {
+            $("#btn-rerun-ocr").hide()
+        }
+
         let tbl = document.createElement("table");
         $(tbl).attr("style", "width: 100%; border: solid 1px #ccc");
         $(tbl).attr("type", "form")
@@ -335,6 +346,15 @@ export class DetailOcrSessionPage
         $("#result-image").html("")
 
         console.log(tableOcrResult)
+
+        if(tableOcrResult != null && tableOcrResult.length > 0)
+        {
+            $("#btn-rerun-ocr").hide()
+        }
+        else 
+        {
+            $("#btn-rerun-ocr").show()
+        }
 
         
         tableOcrResult.map((tableResult)=>{
@@ -383,6 +403,13 @@ export class DetailOcrSessionPage
                 })
 
                 tables.push(tbl)
+                $("#btn-rerun-ocr").hide()
+            }
+            else 
+            {
+
+                $("#btn-rerun-ocr").show()
+                
             }
         })
 

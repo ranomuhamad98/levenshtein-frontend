@@ -2,6 +2,8 @@ import { GenericListPage } from "./genericlistpage.js";
 
 export class TemplatePage extends GenericListPage
 {
+
+
     getApiScript()
     {
         return ["/javascripts/pages/api/templateApi.js", "templateApi"];
@@ -18,9 +20,9 @@ export class TemplatePage extends GenericListPage
         var me = this;
         console.log('initrows')
         for (var i =0; i < rows.length;i++)
-        {
-
-            
+        {   
+            if(me.session.role != "SUPER_ADMIN")
+                rows[i].delete =  "";
             rows[i].createdAt = moment(rows[i].createdAt).format("DD-MM-YYYY HH:mm:ss")
 
         }

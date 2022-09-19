@@ -441,7 +441,7 @@ var TableResizer = {
         $("#drag-" + tblId).off("mouseover");
         $("#drag-" + tblId).on("mouseover", function()
         {
-            $("#drag-" + tblId).css("opacity", "1");
+            //$("#drag-" + tblId).css("opacity", "1");
         })
     
         $("#drag-" + tblId).off("mouseout");
@@ -600,8 +600,8 @@ var TableResizer = {
         
     
         $(table).find("th").each(function(idx){
-            $(this).css("width", info.headers[idx].width);
-            $(this).css("height", info.headers[idx].height);
+            $(this).css("width", parseFloat( info.headers[idx].width));
+            $(this).css("height", parseFloat( info.headers[idx].height));
             $(this).attr("fieldname", info.headers[idx].fieldname );
 
             //alert($(this).attr("fieldname"))
@@ -615,9 +615,9 @@ var TableResizer = {
             if(rowid > -1)
             {
                 $(this).find("td").each(function(colIdx){
-                    $(this).css("height", info.rows[rowid][colIdx].height);
-                    $(this).css("width", info.rows[rowid][colIdx].width);
-                    $(this).attr("fieldname", info.rows[rowid][colIdx].fieldname);
+                    $(this).css("height", parseFloat(info.rows[rowid][colIdx].height));
+                    $(this).css("width", parseFloat(info.rows[rowid][colIdx].width));
+                    $(this).attr("fieldname", parseFloat( info.rows[rowid][colIdx].fieldname));
 
                     //TableResizer.refreshCell($(this)[0])
                 })
@@ -658,8 +658,14 @@ var TableResizer = {
             //let containerHeight = $(tableContainer).height();
 
             let tableHeight = parseFloat($("#" + tableId).css("height"));
-            let tableWidth = parseFloat($("#" + tableId).css("width"));
+            let tableWidth = parseFloat($("#" + tableId).css("Width"));
             let containerHeight = parseFloat($(tableContainer).css("height"));
+
+            if( tbl.data != null && tbl.data.type == "form")
+            {
+                tableHeight = parseFloat($("#" + tableId + " > tr > td").css("height"));
+                tableWidth = parseFloat($("#" + tableId + " > tr > td").css("Width"));
+            }
 
             let deltaheight  = containerHeight - tableHeight;
 
@@ -805,7 +811,7 @@ var TableResizer = {
         {
             
             $(cell).find(".dragger-column-container .field-displayer").remove();
-            let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";
+            let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:90%; height:90%;'></div>";
             $(div).off("dblclick");
             $(div).on("dblclick", function(){
                 cell.click();

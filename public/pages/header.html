@@ -26,6 +26,7 @@
 
         <div class="info">
         <a href="#" class="d-block"><%=session.name %></a>
+        <%=session.role %>
         </div>
     </div>
 
@@ -50,7 +51,6 @@
 
         <% } %>
 
-        <% if(session.role == 'SUPER_ADMIN') { %>
 
         <li class="nav-item" id="templates">
             <a href="/templates" class="nav-link">
@@ -60,8 +60,6 @@
                 </p>
             </a>
         </li>
-
-        <% } %>
 
         <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN'  || session.role == 'OCR_USER') { %>
 
