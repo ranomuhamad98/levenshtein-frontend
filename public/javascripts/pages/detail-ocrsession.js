@@ -16,7 +16,7 @@ export class DetailOcrSessionPage
             mem.initEvents(mem);
         })
         
-    }
+    }   
 
     initnext(me, callback)
     {
@@ -93,7 +93,15 @@ export class DetailOcrSessionPage
             me.reRunOcr(me)
         });
         
-        //$("input[name='displayType']").val("form")
+        $("input[name='displayType']").each(function(item){
+            let type = $(this).val();
+
+            if(type == "form")
+            {
+                $(this).prop("checked" , true)
+                $(this).click();
+            }
+        })
     }
 
     onChangeEvent(me)
@@ -147,10 +155,13 @@ export class DetailOcrSessionPage
             console.log(response)
             if(response.success)
             {
-                $.notify("OCR is successful", "success")
-                me.initnext(me, function(){
-                    me.onChangeEvent(me)
-                })
+                setTimeout(function(){
+                    $.notify("OCR is successful", "success")
+                    me.initnext(me, function(){
+                        me.onChangeEvent(me)
+                    })
+                }, 1000)
+
             }
             else 
             {
@@ -289,48 +300,58 @@ export class DetailOcrSessionPage
         let ocrResult = me.getOcrResultByPage(me, page)
         console.log("createFormDisplay.ocrResult")
         console.log(ocrResult)
-        let formOcrResult = ocrResult.allResults.formOcrResult.positions;
-        $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>View Visualization</a>")
+        let formOcrResult = null;
+        try{
+            formOcrResult = ocrResult.allResults.formOcrResult.positions;
+            $("#result-image").html("<a target='_blank' href='" + ocrResult.allResults.formOcrResult.image  + "'>View Visualization</a>")
 
+        }
+        catch(e)
+        {
+
+        }
 
         console.log(formOcrResult)
 
         if(formOcrResult == null)
         {
             $("#btn-rerun-ocr").show()
+            return null;
         }
         else 
         {
             $("#btn-rerun-ocr").hide()
+
+            let tbl = document.createElement("table");
+            $(tbl).attr("style", "width: 100%; border: solid 1px #ccc");
+            $(tbl).attr("type", "form")
+    
+            formOcrResult.map((result)=>{
+    
+                let tr = document.createElement("tr");
+                
+                let td = document.createElement("td");
+                $(td).attr("style", "border: solid 1px #ccc;")
+                $(td).attr("fieldname", result.fieldname)
+                $(td).html(result.fieldname);
+    
+                let td2 = document.createElement("td");
+                $(td2).attr("style", "border: solid 1px #ccc;")
+                $(td2).attr("fieldname", result.fieldname)
+                $(td2).html(result.text);
+    
+                $(tr).append(td);
+                $(tr).append(td2);
+                $(tbl).append(tr);
+                
+            })
+    
+            console.log(tbl);
+    
+            return tbl;
         }
 
-        let tbl = document.createElement("table");
-        $(tbl).attr("style", "width: 100%; border: solid 1px #ccc");
-        $(tbl).attr("type", "form")
 
-        formOcrResult.map((result)=>{
-
-            let tr = document.createElement("tr");
-            
-            let td = document.createElement("td");
-            $(td).attr("style", "border: solid 1px #ccc;")
-            $(td).attr("fieldname", result.fieldname)
-            $(td).html(result.fieldname);
-
-            let td2 = document.createElement("td");
-            $(td2).attr("style", "border: solid 1px #ccc;")
-            $(td2).attr("fieldname", result.fieldname)
-            $(td2).html(result.text);
-
-            $(tr).append(td);
-            $(tr).append(td2);
-            $(tbl).append(tr);
-            
-        })
-
-        console.log(tbl);
-
-        return tbl;
 
     }
 

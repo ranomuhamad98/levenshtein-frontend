@@ -811,7 +811,7 @@ var TableResizer = {
         {
             
             $(cell).find(".dragger-column-container .field-displayer").remove();
-            let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:90%; height:90%;'></div>";
+            let div = "<div class='field-displayer' style='background-color:#0f0; opacity: 0.5; width:100%; height:100%;'></div>";
             $(div).off("dblclick");
             $(div).on("dblclick", function(){
                 cell.click();
