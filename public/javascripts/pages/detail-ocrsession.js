@@ -116,7 +116,7 @@ export class DetailOcrSessionPage
     {
         console.log(me.ocrResults)
 
-        let ocrResults = btoa(JSON.stringify(me.ocrResults))
+        let ocrResults = Base64.encode(JSON.stringify(me.ocrResults))
         me.ocrSession.ocrResult = ocrResults;
 
         console.log(me.ocrSession)
@@ -125,7 +125,9 @@ export class DetailOcrSessionPage
         
         let id = me.ocrSession.id;
         let url = this.config.LEVENSHTEIN_API + "/ocrsessions/update/" + id;
-        $.post(url, JSON.stringify( me.ocrSession), function (response){
+        console.log('ocrsession update ' + url)
+        console.log(me.ocrSession)
+        $.post(url, JSON.stringify(me.ocrSession), function (response){
 
             console.log("RESPONSE from " + url)
             console.log(response)
@@ -178,7 +180,7 @@ export class DetailOcrSessionPage
         console.log("me.ocrSession")
         console.log(me.ocrSession)
         let ocrResults = me.ocrSession.ocrResult;
-        ocrResults = atob(ocrResults);
+        ocrResults = Base64.decode(ocrResults);
         ocrResults = JSON.parse(ocrResults)
         return ocrResults.length;
     }
