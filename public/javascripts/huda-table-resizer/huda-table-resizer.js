@@ -788,6 +788,16 @@ var TableResizer = {
             if(callback != null)
                 callback(null);
         })
+
+        $("#txtRowNum").focus();
+
+        $("#txtRowNum").off("keydown");
+        $("#txtRowNum").on("keydown", function(event){
+            if(event.which == 13)
+            {
+                $("#btnOkAddRow").click();
+            }
+        })
     }
     ,
     getAllTableInformation: function(divId, opt)
