@@ -653,7 +653,7 @@ var TableResizer = {
     ,
     createResizedTableByInfo: function(divId, tableId, header, info, data, onCellClick=null)
     {
-        
+
         if(info.totalColumn == null)
             info.totalColumn = 1;
 
@@ -685,6 +685,7 @@ var TableResizer = {
             //alert($(this).attr("fieldname"))
             TableResizer.refreshCell($(this)[0])
         });
+
     
         $(table).find("tr[row-idx]").each(function(rowIdx){
             
@@ -695,7 +696,8 @@ var TableResizer = {
                 $(this).find("td").each(function(colIdx){
                     $(this).css("height", parseFloat(info.rows[rowid][colIdx].height));
                     $(this).css("width", parseFloat(info.rows[rowid][colIdx].width));
-                    $(this).attr("fieldname", parseFloat( info.rows[rowid][colIdx].fieldname));
+                    if(info.headers != null)
+                        $(this).attr("fieldname", info.headers[colIdx].fieldname);
 
                     //TableResizer.refreshCell($(this)[0])
                 })
@@ -723,7 +725,6 @@ var TableResizer = {
     ,
     getContextMenu: function()
     {
-        console.log("getContextMenu");
 
         let container = document.createElement("div");
         $(container).css("position", "absolute");
