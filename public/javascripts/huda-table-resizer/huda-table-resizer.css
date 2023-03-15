@@ -176,3 +176,47 @@
   background: url(/images/move.png) no-repeat; 
   background-size: 20px 20px;
 }
+
+.context-menu
+{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 200px;
+  height: 80px;
+  background-color: #fff;
+  padding: 10px;
+  border: solid 0px #ccc;
+  display: none;
+  z-index: 1000;
+  border-radius: 6px;
+  box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+}
+
+.context-menu-item
+{
+  color: #666;
+  cursor: pointer;
+  height: 30px;
+  padding-left: 6px;
+}
+
+.addRowPrompt
+{
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 6;
+  box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  z-index: 10000;
+}
+
+.context-menu-item:hover
+{
+  background-color: #eee;
+}

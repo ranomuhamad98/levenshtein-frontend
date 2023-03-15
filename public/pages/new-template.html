@@ -178,15 +178,22 @@
     <div id="processgif">
 
     </div>
+    <div id="ctx">
+
+    </div>
 </body>
 <%- include ("./footerscript.html") -%>
 
 <script>
 
-
+    $(document).bind("contextmenu",function(e){
+        return false;
+        
+    });
         
     $(document).ready(function()
     {
+        
         var session = "<%=sessionstring %>"
         session = session.replace(/&#34;/gi, '"')
         session = JSON.parse(session)

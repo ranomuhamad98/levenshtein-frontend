@@ -1,5 +1,33 @@
 export class DetailOcrSessionPage
 {
+    getConfidenceThresholds()
+    {
+        return [0, 0.70, 0.95, 1]
+    }
+
+    getConfidenceColors()
+    {
+        return ["#ff1111", "#ffff11", "#ffffff"]
+    }
+
+    mapConfidence(confidence)
+    {
+        console.log("mapConfidence")
+        console.log(confidence)
+
+        let thresholds = this.getConfidenceThresholds()
+        let confidenceColors = this.getConfidenceColors()
+        for(var i = 0; i < thresholds.length - 1; i++)
+        {
+            if(confidence >= thresholds[i] && confidence < thresholds[i+1])
+            {
+                return confidenceColors[i]
+            }
+        }
+
+        return null;
+    }
+
     init(config, id, session)
     {
         var me = this;
@@ -338,7 +366,10 @@ export class DetailOcrSessionPage
                 $(td).html(result.fieldname);
     
                 let td2 = document.createElement("td");
-                $(td2).attr("style", "border: solid 1px #ccc;")
+                let color = me.mapConfidence(result.confidence)
+                $(td2).attr("style", "border: solid 1px #ccc;background-color: " + color)
+
+
                 $(td2).attr("fieldname", result.fieldname)
                 $(td2).html(result.text);
     
@@ -417,7 +448,10 @@ export class DetailOcrSessionPage
                     row.map((cell)=>{
 
                         let td = document.createElement("td");
-                        $(td).attr("style", "border: solid 1px #ccc;")
+                        let color = me.mapConfidence(cell.confidence)
+                        $(td).attr("style", "border: solid 1px #ccc;background-color: " + color)
+
+
                         $(td).attr("fieldname", cell.fieldname)
                         $(td).html(cell.text);
                         $(tr).append(td);

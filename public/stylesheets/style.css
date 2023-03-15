@@ -366,3 +366,8 @@ thead > tr {
   -webkit-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
   -moz-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
 }
+
+#totalCostDisplay
+{
+  font-size: large;
+}

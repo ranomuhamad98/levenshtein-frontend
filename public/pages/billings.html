@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+    <div class="wrapper">
+        
+        <%- include ("./header.html") -%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content" style="padding: 20px">
+                <div style="padding: 0px; font-size: 1.5em">
+                    Billing List
+                </div>
+                <div class="vertical-separator">
+
+                </div>
+                <div class="button-container">
+
+                    <div class="form-group">
+                        <label>Periode Start Date:</label>
+                        <div class="input-group date"  data-target-input="nearest">
+                            <input type="text" id="startDate" class="form-control datetimepicker-input" data-target="#startDate" />
+                            <div class="input-group-append" data-target="#startDate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 10px"></div>
+                    <div class="form-group">
+                        <label>Periode End Date:</label>
+                        <div class="input-group date" data-target-input="nearest">
+                            <input type="text"  id="endDate" class="form-control datetimepicker-input" data-target="#endDate" />
+                            <div class="input-group-append" data-target="#endDate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 10px"></div>
+                    <div class="form-group">
+                        <label></label>
+                        <button class="btn btn-primary" id="btn-display-billing">
+                            Display
+                        </button>
+                    </div>
+                </div> 
+
+                <div class="vertical-separator" id="totalCostDisplay">
+                    <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN') { %>
+                    Total Cost : <div id="totalCost"></div>
+                    <% } %>
+                </div>
+
+                <div class="dataTables_wrapper no-footer">
+                    
+                    <div style="padding: 30px">
+                        
+                    </div>
+                
+                    <table id="billingList">
+                        <thead>
+                            <tr>                                
+                                <th>OCR-Session</th>
+                                <th>Session Date</th>
+                                <th>Document</th>
+                                <th>Total Page</th>
+                                <% if(session.role == 'ADMIN' || session.role == 'SUPER_ADMIN') { %>
+                                <th>Cost (Rp)</th>
+                                <% } %>
+                            </tr>
+                        </thead>
+                    </table>
+
+                
+                </div>
+            </section>
+            
+        </div>
+        
+        <!-- /.content-wrapper -->
+        <%- include ("./footer.html") -%>
+
+    </div>
+
+</body>
+<%- include ("./footerscript.html") -%>
+
+<script type="module">
+import { BillingPage }  from './javascripts/pages/billing.js';
+
+$(document).ready(function () {
+    var config = "<%=config %>";
+        config = config.replace(/&#34;/gi, '"')
+        config = JSON.parse(config)
+    console.log(config)
+
+    var session = "<%=sessionstring %>"
+    session = session.replace(/&#34;/gi, '"')
+    session = JSON.parse(session)
+
+    let billingPage = new BillingPage();
+    billingPage.init(config, session);
+});
+</script>
+</html>

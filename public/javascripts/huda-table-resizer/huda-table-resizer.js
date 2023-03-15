@@ -165,9 +165,21 @@ var TableResizer = {
         //Create new TR with initialized TDs
         var tr = document.createElement("tr");
         let totalCols = $(tbl).find("th").length;
+
+        let h = 30;
+        if(idx == -1)
+        {
+            h = 30;
+        }
+        else
+        {
+            h = $(tbl).find("tr[row-idx=" + idx + "]").css("height");
+        }
+
         for(var i = 0; i < totalCols; i++)
         {
             var td = document.createElement("td");
+            $(td).css("height", h);
             $(td).append(TableResizer.getTdContent());
             $(tr).append(td);
         }
@@ -407,15 +419,37 @@ var TableResizer = {
         });
     
         $("#drag-" + tblId).off("mousedown");
-        $("#drag-" + tblId).on("mousedown", function()
+        $("#drag-" + tblId).on("mousedown", function(event)
         {
             $(".tbldragger").css("opacity", ".2");
-            $("#tbl-container-" + tblId).draggable();
             $("#drag-" + tblId).css("opacity", "1");
 
             $(".tblcontainer").css("z-index", 1);
             TableResizer.selectedTableId = tblId;
             $("#tbl-container-" + tblId).css("z-index", 10)
+            if(event.which == 1)
+            {
+                $("#tbl-container-" + tblId).draggable();
+                
+            }
+            else if(event.which == 3)
+            {
+                let data = $(tbl).attr("data")
+                data = JSON.parse(data);
+
+                if(document.getElementById("myctx") != null && data.type == "table")
+                {
+                    let l = $("#tbl-container-" + tblId).css("left");
+                    let t = $("#tbl-container-" + tblId).css("top");
+
+                    let ctxMenu = $("#myctx");
+                    $(ctxMenu).css("position", "absolute");
+                    $(ctxMenu).css("top", t);
+                    $(ctxMenu).css("left", l);
+                    $(ctxMenu).show();
+                }
+
+            }
 
         })
 
@@ -497,10 +531,48 @@ var TableResizer = {
                 tbl.onCellClick(this, tbl);
         })
     
-        
+        $("#ctxAddRows").off("click");
+        $("#ctxAddRows").on("click", function(event){
+            $("#myctx").hide();
+            TableResizer.promptRowNumber(tbl, function(num){
+                if(num != null && num > 0)
+                {
+                    TableResizer.addRowsEvent(tbl, num, 0)
+                }
+            });
+        })
 
+        $("#ctxClearRows").off("click");
+        $("#ctxClearRows").on("click", function(event){
+            $("#myctx").hide();
+            TableResizer.clearRows(tbl);
+        })
+
+
+        $(document.body).off("click");
+        $(document.body).on("click", function(){
+            $("#myctx").hide();
+        });
         TableResizer.draginit();
         
+    }
+    ,
+    addRowsEvent: function(tbl, num, idx)
+    {
+        for(let i=0; i < num; i++)
+        {
+            TableResizer.addRow(tbl, idx);
+        }
+    }
+    ,
+    clearRows: function(tbl)
+    {
+        let totalRows = $(tbl).find("tr").length - 1;
+
+        for(let i=totalRows -1; i > 0; i--)
+        {
+            TableResizer.delRow(tbl, i);
+        }
     }
     ,
     //If tableID is null, it will be automatically created, or else the table's ID uses tableiD specified
@@ -535,6 +607,12 @@ var TableResizer = {
         $(tableContainer).append(moverDiv);
         $(tableContainer).append(tbl);
         $("#" + divId).append(tableContainer);
+
+        if(document.getElementById("myctx") == null)
+        {
+            let ctx = TableResizer.getContextMenu();
+            $("#" + divId).append(ctx);
+        }
 
         $("#tbl-container-" + tblId).css("z-index", 11)
     
@@ -641,6 +719,74 @@ var TableResizer = {
         $(".tbldragger").css("opacity", ".2");
         $(".tbldragger").css("cursor", "pointer");
         
+    }
+    ,
+    getContextMenu: function()
+    {
+        console.log("getContextMenu");
+
+        let container = document.createElement("div");
+        $(container).css("position", "absolute");
+        $(container).css("left", "0px");
+        $(container).css("top", "0px");
+
+        let promp = document.createElement("div");
+        $(promp).attr("id", "promptAddRow");
+        $(promp).addClass("addRowPrompt");
+        let html = "<div style='padding: 3px'>How many rows to add?</div><div style='padding: 3px'><input type='number' id='txtRowNum' /></div>";
+        html += "<div style='padding: 3px'><button id='btnOkAddRow' style='width: 60px'>Ok</button><button id='btnCancelAddRow'>Cancel</button></div>"
+        $(promp).html(html)
+
+
+        let mn = document.createElement("div");
+        $(mn).addClass("context-menu");
+        $(mn).attr("id", "myctx");
+
+        let mnItem = document.createElement("div");
+        $(mnItem).addClass("context-menu-item");
+        $(mnItem).html("Add Rows");
+        $(mnItem).attr("id", "ctxAddRows");
+
+        $(mn).append(mnItem);
+
+
+        mnItem = document.createElement("div");
+        $(mnItem).addClass("context-menu-item");
+        $(mnItem).html("Clear Rows");
+        $(mnItem).attr("id", "ctxClearRows");
+
+        $(mn).append(mnItem);
+
+        $(container).append(mn);
+        $(container).append(promp);
+
+
+        return container;
+    }
+    ,
+    promptRowNumber: function(tbl, callback)
+    {
+        let left = $("#tbl-container-" + tbl.id).css("left");
+        let top = $("#tbl-container-" + tbl.id).css("top");
+
+        $("#promptAddRow").css("left", parseFloat(left) - 20);
+        $("#promptAddRow").css("top", parseFloat(top) - 20);
+        $("#promptAddRow").show("fast");
+
+        $("#btnOkAddRow").off("click");
+        $("#btnOkAddRow").on("click", function(){
+            $("#promptAddRow").hide();
+            let num = $("#txtRowNum").val();
+            if(callback != null)
+                callback(num);
+        })
+
+        $("#btnCancelAddRow").off("click");
+        $("#btnCancelAddRow").on("click", function(){
+            $("#promptAddRow").hide();
+            if(callback != null)
+                callback(null);
+        })
     }
     ,
     getAllTableInformation: function(divId, opt)
