@@ -728,13 +728,13 @@ var TableResizer = {
         let container = document.createElement("div");
         $(container).css("position", "absolute");
         $(container).css("left", "0px");
-        $(container).css("top", "0px");
+        $(container).css("top", "0px"); 
 
         let promp = document.createElement("div");
         $(promp).attr("id", "promptAddRow");
         $(promp).addClass("addRowPrompt");
         let html = "<div style='padding: 3px'>How many rows to add?</div><div style='padding: 3px'><input type='number' id='txtRowNum' /></div>";
-        html += "<div style='padding: 3px'><button id='btnOkAddRow' style='width: 60px'>Ok</button><button id='btnCancelAddRow'>Cancel</button></div>"
+        html += "<div style='padding: 6px; text-align: center'><button id='btnOkAddRow' style='width: 80px; border: solid 1px #ccc;'>Ok</button>&nbsp;&nbsp;<button id='btnCancelAddRow' style='width: 80px; border: solid 1px #ccc;'>Cancel</button></div>"
         $(promp).html(html)
 
 
