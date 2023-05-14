@@ -38,6 +38,7 @@ export class GenericListPage {
             function() {
                 eval("me.api = " + scrpt[1]);
                 me.api.config = me.config;
+                me.api.session = me.session;
                 me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
                 me.initControls();
             }

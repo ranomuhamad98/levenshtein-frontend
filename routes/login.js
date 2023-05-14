@@ -4,6 +4,8 @@ const path = require('path');
 
 const fs = require('fs');
 const https = require('https');
+const axios = require('axios').default;
+
 
 function getConfig()
 {
@@ -66,13 +68,10 @@ router.get('/authenticate/:email/:name', function(req,res){
 
 
 router.get('/signout', function(req,res){
-    //console.log(req)
-    
     req.session.login = false;
     var dir = __dirname;
     var p = path.resolve( dir, "../public/pages/", "signout");
-    res.render(p, { config: getConfig() } )
-
+    res.render(p, { config: getConfig() } );
 })
 
 

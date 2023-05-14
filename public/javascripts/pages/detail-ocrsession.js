@@ -530,28 +530,28 @@ export class DetailOcrSessionPage
         $.get(url, function(response){
             console.log("response")
             console.log(response)
-            let uri = response.payload.uri;
-            
+            let downloadProject = response.payload.project;
+            let downloadBucket = response.payload.bucket;
+            let downloadPath = response.payload.path;
+
             me.interval = setInterval(function()
             {
-                me.checkAndDownloadOcrResult(me, uri)
-            }, 1000)
+                me.checkAndDownloadOcrResult(me, downloadProject, downloadBucket, downloadPath)
+            }, 5000)
 
 
         } )
         //window.open(url);
     }
 
-    checkAndDownloadOcrResult(me, uri)
+    checkAndDownloadOcrResult(me, downloadProject, downloadBucket, downloadPath)
     {
-        uri = uri.replace("gs://", "")
-        let uris = uri.split("/")
 
-        let bucket = uris[0]
-        let filepath = uri.replace(bucket + "/", "")
-        filepath = encodeURIComponent(filepath)
 
-        let url =  me.config.UPLOAD_URL + "/upload/gcs/download-file/" + me.config.PROJECT + "/" + me.config.GCS_UPLOAD_BUCKET + "/" +  filepath
+        //let url =  me.config.UPLOAD_URL + "/upload/gcs/download-file/" + me.config.PROJECT + "/" + me.config.GCS_UPLOAD_BUCKET + "/" +  filepath
+        let url =  me.config.UPLOAD_URL + "/gcs/download?path=" + 
+        downloadProject + ":" + downloadBucket + "/" +  downloadPath;
+
         console.log("checkAndDownloadOcrResult().url : " + url)
         $.get(url, function(response){
             console.log('checkAndDownloadOcrResult().response')

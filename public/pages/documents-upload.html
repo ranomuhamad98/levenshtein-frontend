@@ -137,7 +137,10 @@ function getUrl()
     var folder = config.GCS_PDF_FOLDER;
     var baseUrl = config.UPLOAD_URL;
 
-    var url = baseUrl + "/upload/gcs/" + project + "/" + bucket + "/" + folder;
+    //var url = baseUrl + "/upload/gcs/" + project + "/" + bucket + "/" + folder;
+
+    var url = baseUrl + "/gcs/upload?path=" + project + ":" + bucket + "/" + folder + "/";
+
     console.log(url);
     return url;
 }

@@ -47,6 +47,7 @@ var Page2 = {
             console.log(tooltip)
             tippy(this, {
                 content: tooltip,
+                theme: 'tomato'
               });      
 
         })
@@ -412,7 +413,9 @@ var Page2 = {
         let filepath = Page2.GCS_JSON_FOLDER + "/" + filename;
         filepath = encodeURIComponent(filepath);
 
-        var url = Page2.UPLOAD_BASE_URL + "/upload/gcs-create-file/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + filepath;
+        //var url = Page2.UPLOAD_BASE_URL + "/upload/gcs-create-file/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + filepath;
+        var url = Page2.UPLOAD_BASE_URL + "/gcs/create?path=" + Page2.PROJECT + ":" + Page2.GCS_BUCKET + "/" + filepath;
+
         console.log("create file url");
         console.log(url);
 
@@ -457,7 +460,8 @@ var Page2 = {
         var formDataToUpload = new FormData(form);
         formDataToUpload.append("file", blob, originalFilename);
 
-        var url = Page2.UPLOAD_BASE_URL + "/upload/gcs/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER;
+        //var url = Page2.UPLOAD_BASE_URL + "/upload/gcs/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER;
+        var url = Page2.UPLOAD_BASE_URL + "/gcs/upload?path=" + Page2.PROJECT + ":" + Page2.GCS_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER + "/";
 
         // Submit Form and upload file
         $.ajax({
@@ -1212,7 +1216,9 @@ var Page2 = {
     deleteJsonFile: function(filepath, callback)
     {
         let f = encodeURIComponent(Page2.GCS_JSON_FOLDER + "/" + filepath)
-        var url = Page2.UPLOAD_BASE_URL + "/upload/gcs-public-delete/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + f;
+        //var url = Page2.UPLOAD_BASE_URL + "/upload/gcs-public-delete/" + Page2.PROJECT + "/" + Page2.GCS_BUCKET + "/" + f;
+        var url = Page2.UPLOAD_BASE_URL + "/gcs/delete?path=" + Page2.PROJECT + ":" + Page2.GCS_BUCKET + "/" + f;
+
         console.log("delete url");
         console.log(url);
         $.get(url, function(response)
@@ -1561,7 +1567,7 @@ var Page2 = {
         fileurl = fileurl.replace("gs://", "https://storage.googleapis.com/")
 
         let pageTemplate = {};
-        //pageTemplate.templateId = $("#cmb-template").val();
+        pageTemplate.templateId = $("#cmb-template").val();
         pageTemplate.pageImageUrl = fileurl;
         pageTemplate.document = Page2.FILE_URI;
         pageTemplate.page = Page2.CUR_PAGE;
@@ -1613,8 +1619,11 @@ var Page2 = {
                 var formdata = new FormData();
                 formdata.append("file", file, fname);
     
-                let uploadUrl = Page2.UPLOAD_URL + "/upload/gcs/" + Page2.PROJECT + "/" + Page2.GCS_UPLOAD_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER;
+                //let uploadUrl = Page2.UPLOAD_URL + "/upload/gcs/" + Page2.PROJECT + "/" + Page2.GCS_UPLOAD_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER;
     
+                let uploadUrl = Page2.UPLOAD_URL + "/gcs/upload?path=" + Page2.PROJECT + ":" + Page2.GCS_UPLOAD_BUCKET + "/" + Page2.GCS_IMAGE_FOLDER + "/";
+
+
                 console.log("uploadUrl")
                 console.log(uploadUrl)
                 console.log(fname)
@@ -1625,7 +1634,10 @@ var Page2 = {
                     data: formdata,
                     processData: false,
                     contentType: false,
-                }).done(function(respond){
+                }).catch(function(e){
+                    console.log(e)
+                })
+                .done(function(respond){
                     //alert(respond);
                     console.log("RESPON")
                     console.log(respond)
@@ -1634,10 +1646,7 @@ var Page2 = {
                         callback(respond)
                 });
 
-
               }, 'image/png');
-              
-
 
         }
         catch (error){

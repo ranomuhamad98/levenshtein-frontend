@@ -5,6 +5,7 @@ export class AddOcrSessionPage
         var me = this;
         this.config = config;
         this.documentid = documentid;
+        this.session = session;
 
         $("li#" + session.activeLink + " > a > p").css("color", "#cc5522")
 
@@ -128,6 +129,7 @@ export class AddOcrSessionPage
             document: filepath,
             sessionStartDate : Date.now(),
             runningStatus : 0,
+            executedBy: this.session.email   
         }
 
         return ocrSession;

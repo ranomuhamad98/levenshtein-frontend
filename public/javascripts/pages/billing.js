@@ -100,7 +100,8 @@ export class BillingPage
     {
         let cols = [
             { data: 'sessionID'},
-            { data: 'sessionDate' },    
+            { data: 'sessionDate' },
+            { data: 'executedBy' },   
             { data: 'document' },
             { data: 'totalPage' }
         ];

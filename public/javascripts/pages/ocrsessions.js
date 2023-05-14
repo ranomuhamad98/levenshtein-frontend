@@ -31,10 +31,11 @@ export class OcrSessionPage extends GenericListPage
         return [
             { data: 'no' },
             { data: 'sessionID'},
-                { data: 'sessionStartDate'},
-                { data: 'sessionEndDate' },
-                { data: 'document' },
-                { data: 'runningStatus' }
+            { data: 'executedBy'},
+            { data: 'sessionStartDate'},
+            { data: 'sessionEndDate' },
+            { data: 'document' },
+            { data: 'runningStatus' }
         ]
     }
 

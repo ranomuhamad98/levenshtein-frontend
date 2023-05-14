@@ -16,6 +16,14 @@ function getConfig(req)
     config.UPLOAD_URL = process.env.UPLOAD_URL;
     config.LEVENSHTEIN_API = process.env.LEVENSHTEIN_API;
     config.CURRENT_USER =  { email : req.session.email, name : req.session.name };
+    config.DOWNLOAD_OCR_PROCESSING_PROJECT = process.env.DOWNLOAD_OCR_PROCESSING_PROJECT;
+    config.DOWNLOAD_OCR_PROCESSING_BUCKET = process.env.DOWNLOAD_OCR_PROCESSING_BUCKET;
+    config.DOWNLOAD_OCR_PROCESSING_FOLDER = process.env.DOWNLOAD_OCR_PROCESSING_FOLDER;
+    config.DOWNLOAD_OCR_RESULT_PROJECT = process.env.DOWNLOAD_OCR_RESULT_PROJECT;
+    config.DOWNLOAD_OCR_RESULT_BUKCET = process.env.DOWNLOAD_OCR_RESULT_BUKCET;
+    config.DOWNLOAD_OCR_RESULT_FOLDER = process.env.DOWNLOAD_OCR_RESULT_FOLDER;
+
+  
     console.log(config);
     return config;
 }

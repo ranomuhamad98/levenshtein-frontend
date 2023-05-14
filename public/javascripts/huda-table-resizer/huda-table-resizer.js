@@ -534,10 +534,12 @@ var TableResizer = {
         $("#ctxAddRows").off("click");
         $("#ctxAddRows").on("click", function(event){
             $("#myctx").hide();
-            TableResizer.promptRowNumber(tbl, function(num){
+
+            TableResizer.promptRowNumber(TableResizer.selectedTableId, function(num){
                 if(num != null && num > 0)
                 {
-                    TableResizer.addRowsEvent(tbl, num, 0)
+                    let selectedTbl = document.getElementById(TableResizer.selectedTableId);
+                    TableResizer.addRowsEvent(selectedTbl, num, 0)
                 }
             });
         })
@@ -545,7 +547,8 @@ var TableResizer = {
         $("#ctxClearRows").off("click");
         $("#ctxClearRows").on("click", function(event){
             $("#myctx").hide();
-            TableResizer.clearRows(tbl);
+            let selectedTbl = document.getElementById(TableResizer.selectedTableId);
+            TableResizer.clearRows(selectedTbl);
         })
 
 
@@ -578,6 +581,7 @@ var TableResizer = {
     //If tableID is null, it will be automatically created, or else the table's ID uses tableiD specified
     createResizedTable: function(divId, colNum, rowNum, header, data, tableId, onCellClick=null)
     {
+
         var pressedcol = false;
         var pressedrow = false;
         var start = undefined;
@@ -733,6 +737,7 @@ var TableResizer = {
 
         let promp = document.createElement("div");
         $(promp).attr("id", "promptAddRow");
+        $(promp).css("position", "absolute");
         $(promp).addClass("addRowPrompt");
         let html = "<div style='padding: 3px'>How many rows to add?</div><div style='padding: 3px'><input type='number' id='txtRowNum' /></div>";
         html += "<div style='padding: 6px; text-align: center'><button id='btnOkAddRow' style='width: 80px; border: solid 1px #ccc;'>Ok</button>&nbsp;&nbsp;<button id='btnCancelAddRow' style='width: 80px; border: solid 1px #ccc;'>Cancel</button></div>"
@@ -765,13 +770,14 @@ var TableResizer = {
         return container;
     }
     ,
-    promptRowNumber: function(tbl, callback)
+    promptRowNumber: function(tblId, callback)
     {
-        let left = $("#tbl-container-" + tbl.id).css("left");
-        let top = $("#tbl-container-" + tbl.id).css("top");
+        let l = $("#tbl-container-" + tblId).css("left");
+        let t = $("#tbl-container-" + tblId).css("top");
 
-        $("#promptAddRow").css("left", parseFloat(left) - 20);
-        $("#promptAddRow").css("top", parseFloat(top) - 20);
+        $("#promptAddRow").css("position", "absolute");
+        $("#promptAddRow").css("left", l);
+        $("#promptAddRow").css("top", t);
         $("#promptAddRow").show("fast");
 
         $("#btnOkAddRow").off("click");
@@ -920,6 +926,7 @@ var TableResizer = {
                 let row = [];
                 let prevCell = null;
                 let colPosX = 0;
+                let colIdx = 0;
                 $(this).find("td").each(function(){
                     let cell = {};
 
@@ -928,7 +935,9 @@ var TableResizer = {
                     cell.width = parseFloat($(this).css("width"));
                     cell.height = parseFloat($(this).css("height"));
                     cell.y = rowPosY;
+                    cell.x = info.headers[colIdx].x;
 
+                    /*
                     if(prevCell == null)
                     {
                         colPosX = info.posX;
@@ -938,9 +947,12 @@ var TableResizer = {
                         colPosX =  parseFloat(prevCell.x) +  parseFloat(prevCell.width);
                     }
                     cell.x = colPosX;
+                    */
+
                     
                     row.push(cell);
                     prevCell = cell;
+                    colIdx++;
                 });
     
                 info.rows.push(row);

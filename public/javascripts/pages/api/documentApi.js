@@ -1,8 +1,16 @@
 var documentApi = {
     config: null,
+    session: null,
     findAll: function (offset, limit, callback)
     {
+
+        console.log("SESSION")
+        console.log(documentApi.session)
         let url = documentApi.config.LEVENSHTEIN_API + "/documents/" + offset + "/" + limit;
+
+        if(documentApi.session.role.toLowerCase().indexOf("admin") == -1)
+            url += "?username=" + documentApi.config.CURRENT_USER.email;
+
         console.log(url)
         $.get(url, function(result){
             let data = result.payload;

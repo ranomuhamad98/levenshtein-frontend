@@ -378,3 +378,12 @@ thead > tr {
 {
   font-size: large;
 }
+
+.tippy-box[data-theme~='tomato'] {
+  background-color: #fff;
+  color: yellow;
+  border: solid 1px #ccc;
+  box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: -2px 0px 23px -1px rgba(0,0,0,0.75);
+}
