@@ -78,11 +78,13 @@ export class DetailOcrSessionPage
         let cmb = $("#cmb-page")        
         $(cmb).html("")
         let totalPage  = me.getTotalPages(me);
-        for(let i = 0; i < totalPage; i++)
+        let pages = me.getPages(me);
+
+        for(let i = 0; i < pages.length; i++)
         {
             let opt = document.createElement("option")
-            $(opt).attr("value", (i+1))
-            $(opt).html((i+1))
+            $(opt).attr("value", pages[i])
+            $(opt).html(pages[i])
 
             $(cmb).append(opt)
         }
@@ -211,6 +213,22 @@ export class DetailOcrSessionPage
         ocrResults = Base64.decode(ocrResults);
         ocrResults = JSON.parse(ocrResults)
         return ocrResults.length;
+    }
+
+    getPages(me)
+    {
+        console.log("me.getPages")
+        console.log(me.ocrSession)
+        let pages = [];
+        let ocrResults = me.ocrSession.ocrResult;
+        ocrResults = Base64.decode(ocrResults);
+        ocrResults = JSON.parse(ocrResults)
+        for(let i = 0; i < ocrResults.length; i++)
+        {
+            let ocrRes = ocrResults[i];
+            pages.push(ocrRes.page)
+        }
+        return pages;
     }
 
     getSession (id, callback)

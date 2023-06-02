@@ -14,14 +14,24 @@ export class DocumentPage extends GenericListPage
 
     initRows(rows)
     {
+        let me = this;
+        let removeIndexes = [];
         for (var i =0; i < rows.length; i++)
         {
+            if(me.session.role.indexOf("ADMIN") == -1 && rows[i].upload_by != me.session.email)
+            {
+                removeIndexes.push(i);
+            }
             rows[i].createTemplate = "<div class='row-menu row-create-template' data='" + rows[i].filename + "'>Create Template</div>"
             rows[i].process = "<div class='row-menu row-ocr'  data='" + rows[i].id + "'>OCR</div>"
             console.log('initrows')
             rows[i].upload_date = moment(rows[i].upload_date).format("DD-MM-YYYY HH:mm:ss")
             rows[i].updatedAt = moment(rows[i].updatedAt).format("DD-MM-YYYY HH:mm:ss")
         }
+
+        removeIndexes.map((idx)=>{
+            rows.splice(idx, 1);
+        })
         return rows;
     }
 
