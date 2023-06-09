@@ -24,6 +24,12 @@ export class GenericListPage {
         me.config = config;
         me.session = session;
 
+        GLOBAL.session.user = {
+            email: session.email,
+            name: session.name,
+            userRole: session.role
+        }
+        
         console.log(me.session)
         let scrpt = me.getApiScript();
 

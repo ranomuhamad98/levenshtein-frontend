@@ -2,6 +2,7 @@ import { GenericListPage } from "./genericlistpage.js";
 
 export class DocumentPage extends GenericListPage
 {
+
     getApiScript()
     {
         return ["/javascripts/pages/api/documentApi.js", "documentApi"];

@@ -4,7 +4,7 @@ var billingApi = {
     {
         let url = billingApi.config.LEVENSHTEIN_API + "/billing/info?date1=" + date1 + "&date2=" + date2;
         console.log(url)
-        $.get(url, function(result){
+        AppUtil.get(url, function(result){
             let data = result.payload;
             console.log(data)
             if(result.success )
@@ -17,7 +17,7 @@ var billingApi = {
                 if(callback != null && callback.error != null)
                     callback.error(data);
             }
-        })
+        }, { user: GLOBAL.session.user })
     }
 
 

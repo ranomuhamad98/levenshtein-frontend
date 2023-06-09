@@ -8,6 +8,12 @@ export class BillingPage
         me.config = config;
         me.session = session;
 
+        GLOBAL.session.user = {
+            email: session.email,
+            name: session.name,
+            userRole: session.role
+        }
+
         $('#startDate').datetimepicker({
             format: 'DD/MM/YYYY' 
         });
@@ -62,7 +68,7 @@ export class BillingPage
         let promise = new Promise((resolve, reject)=>{
             let url = me.config.LEVENSHTEIN_API + "/billing/info?date1=" + dt1 + "&date2=" + dt2;
             console.log(url)
-            $.get(url, function(response){
+            AppUtil.get(url, function(response){
                 if(response.success)
                 {
                     resolve(response.payload)
@@ -71,7 +77,7 @@ export class BillingPage
                 {
                     reject(response.error)
                 }
-            })
+            }, { user: GLOBAL.session.user   })
         })
         return promise;
     }

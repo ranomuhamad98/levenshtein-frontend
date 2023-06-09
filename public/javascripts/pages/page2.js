@@ -508,6 +508,10 @@ var Page2 = {
         url2 = url2.replace("/documents/download/", "")
         $("#processgif").show();
         Page2.getAllPageTemplatesByDocument(url2).then((pageTemplates)=>{
+            Page2.pageTemplates = pageTemplates;
+
+            console.log("pageTemplates")
+            console.log(pageTemplates)
 
             //Set local page images from page templates in database
             Page2.setImagesFromPageTemplates(pageTemplates, 0, function(){
@@ -1479,6 +1483,14 @@ var Page2 = {
     displayTemplate: function(template)
     {
         TableResizer.clearTable("divPdfTable")
+        console.log("template")
+        console.log(template)
+        if(template.templateId != null)
+            $("#cmb-template").val(template.templateId);
+        else 
+            $("#cmb-template").val(template.id);
+        $("#cmb-template").select2();
+
         let sTemplate = template.tableTemplate;
         sTemplate = atob(sTemplate);
         let templates =  JSON.parse(sTemplate);
@@ -1660,6 +1672,10 @@ var Page2 = {
     {
         $("#processgif").show();
         Page2.getCurrentPageTemplate(function(pageTemplate){
+
+            console.log("getAndDisplayCurrentPageTemplate")
+            console.log(pageTemplate);
+
             $("#processgif").hide();
             
             //let template = pageTemplate.tableTemplate;

@@ -8,6 +8,11 @@ export class UserPage extends GenericListPage
         var me = this;
         super.init(config, session)
         me.session = session;
+        GLOBAL.session.user = {
+            email: session.email,
+            name: session.name,
+            userRole: session.role
+        }
 
         me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
         me.initControls();

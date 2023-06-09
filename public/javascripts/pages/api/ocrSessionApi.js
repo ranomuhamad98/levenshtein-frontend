@@ -4,7 +4,7 @@ var ocrSessionApi = {
     {
         let url = ocrSessionApi.config.LEVENSHTEIN_API + "/ocrsessions/" + offset + "/" + limit;
         console.log(url)
-        $.get(url, function(result){
+        AppUtil.get(url, function(result){
             let data = result.payload;
             console.log(data)
             if(result.success )
@@ -17,13 +17,13 @@ var ocrSessionApi = {
                 if(callback != null && callback.error != null)
                     callback.error(data);
             }
-        })
+        }, { user: GLOBAL.session.user })
     }
     ,
     findByKeyword: function (keyword, offset, limit, callback)
     {
         let url = ocrSessionApi.config.LEVENSHTEIN_API + "/ocrsessions/find/" + keyword + "/" + offset + "/" + limit;
-        $.get(url, function(result){
+        AppUtil.get(url, function(result){
             let data = result.payload;
             if(result.success )
             {
@@ -35,7 +35,7 @@ var ocrSessionApi = {
                 if(callback != null && callback.error != null)
                     callback.error(data);
             }
-        })
+        }, { user: GLOBAL.session.user })
     }
     ,
     delete: function (id, callback)

@@ -12,7 +12,9 @@ var documentApi = {
             url += "?username=" + documentApi.config.CURRENT_USER.email;
 
         console.log(url)
-        $.get(url, function(result){
+        AppUtil.get(url, function(result){
+
+            console.log(result)
             let data = result.payload;
             console.log(data)
             if(result.success )
@@ -25,13 +27,13 @@ var documentApi = {
                 if(callback != null && callback.error != null)
                     callback.error(data);
             }
-        })
+        }, { user: GLOBAL.session.user })
     }
     ,
     findByKeyword: function (keyword, offset, limit, callback)
     {
         let url = documentApi.config.LEVENSHTEIN_API + "/documents/find/" + keyword + "/" + offset + "/" + limit;
-        $.get(url, function(result){
+        AppUtil.get(url, function(result){
             let data = result.payload;
             if(result.success )
             {
@@ -43,7 +45,7 @@ var documentApi = {
                 if(callback != null && callback.error != null)
                     callback.error(data);
             }
-        })
+        }, { user: GLOBAL.session.user })
     }
     ,
     delete: function (id, callback)
