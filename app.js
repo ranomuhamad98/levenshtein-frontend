@@ -75,6 +75,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
+/*
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -84,7 +85,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+*/
 
 app.listen(port)
 

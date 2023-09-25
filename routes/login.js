@@ -68,10 +68,18 @@ router.get('/authenticate/:email/:name', function(req,res){
 
 
 router.get('/signout', function(req,res){
-    req.session.login = false;
-    var dir = __dirname;
-    var p = path.resolve( dir, "../public/pages/", "signout");
-    res.render(p, { config: getConfig() } );
+    let config = getConfig();
+    let url = config.LEVENSHTEIN_API + "/users/signout?user=" + req.session.email + "&sessionID=" + req.session.sessionID;
+  
+    console.log("goto " + url)
+    axios.get(url ).then((response)=>{
+        req.session.login = false;
+        console.log("signoput")
+        console.log(response)
+        res.redirect("/")
+    }).catch((e)=>{
+        res.redirect("/")    
+    });
 })
 
 
