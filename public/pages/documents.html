@@ -105,6 +105,11 @@ $(document).ready(function () {
     session = session.replace(/&#34;/gi, '"')
     session = JSON.parse(session)
 
+    console.log("SESSION");
+    console.log(session);
+
+    GLOBAL.session = session;
+
     let documentPage = new DocumentPage();
     documentPage.init(config, session);
 });

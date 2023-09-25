@@ -77,6 +77,16 @@ export class AddEditUserPage
             $("#userRole").append("<option value='ADMIN'>ADMIN</option>")
         }
 
+        $(document.body).off("mouseover");
+        $(document.body).on("mouseover", function(){
+            console.log("onmouseover")
+            GLOBAL.session.lastLogin = new Date( Date.now());
+            console.log(GLOBAL.session.lastLogin)
+        })
+
+        GLOBAL.CHECKIDLEON = true;
+        setInterval(GLOBAL.checkIdle, 1000);
+
     }
 
     getUserById(id)

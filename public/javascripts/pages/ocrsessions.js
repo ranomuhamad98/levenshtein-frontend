@@ -7,6 +7,8 @@ export class OcrSessionPage extends GenericListPage
     {
         var me = this;
         super.init(config, session)
+        GLOBAL.CHECKIDLEON = false;
+
         me.session = session;
         GLOBAL.session.user = {
             email: session.email,

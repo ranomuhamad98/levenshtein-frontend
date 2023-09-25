@@ -85,6 +85,9 @@ $(document).ready(function () {
     session = session.replace(/&#34;/gi, '"')
     session = JSON.parse(session)
 
+    GLOBAL.session = session;
+
+
     let templatePage = new TemplatePage();
     templatePage.init(config, session);
 });

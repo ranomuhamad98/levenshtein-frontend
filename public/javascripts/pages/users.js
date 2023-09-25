@@ -11,11 +11,15 @@ export class UserPage extends GenericListPage
         GLOBAL.session.user = {
             email: session.email,
             name: session.name,
-            userRole: session.role
+            userRole: session.role,
+            lastLogin: session.lastLogin
         }
+
 
         me.loadData(me,  { success: function(payload){ me.loadDataSuccess(me, payload) }, error: null} )
         me.initControls();
+
+
 
     }
 

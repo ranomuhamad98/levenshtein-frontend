@@ -27,10 +27,24 @@ export class GenericListPage {
         GLOBAL.session.user = {
             email: session.email,
             name: session.name,
-            userRole: session.role
+            userRole: session.role,
+            lastLogin: session.lastLogin
         }
         
+        console.log("me.session")
         console.log(me.session)
+
+
+        $(document.body).off("mouseover");
+        $(document.body).on("mouseover", function(){
+            console.log("onmouseover")
+            GLOBAL.session.lastLogin = new Date( Date.now());
+            console.log(GLOBAL.session.lastLogin)
+        })
+
+        GLOBAL.CHECKIDLEON = true;
+        setInterval(GLOBAL.checkIdle, 1000);
+
         let scrpt = me.getApiScript();
 
         //$("li#" + me.session.activeLink + " a").removeClass("nav-link")

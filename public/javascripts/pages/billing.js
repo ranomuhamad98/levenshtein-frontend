@@ -34,6 +34,16 @@ export class BillingPage
         $("#btn-display-billing").on("click", function(){
             me.loadAndDisplayBillingData(me);
         })
+
+        $(document.body).off("mouseover");
+        $(document.body).on("mouseover", function(){
+            console.log("onmouseover")
+            GLOBAL.session.lastLogin = new Date( Date.now());
+            console.log(GLOBAL.session.lastLogin)
+        })
+
+        GLOBAL.CHECKIDLEON = true;
+        setInterval(GLOBAL.checkIdle, 1000);
     }
 
     loadAndDisplayBillingData(me)

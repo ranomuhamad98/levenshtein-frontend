@@ -142,11 +142,14 @@ router.post("/login", function(req, res){
       req.session.email = loggedUser.email;
       req.session.name = loggedUser.firstname;
       req.session.role = loggedUser.role;
+      req.session.lastLogin = loggedUser.lastLogin;
+      req.session.sessionID = loggedUser.sessionID;
+      req.session.idleTimeout = loggedUser.idleTimeout;
       res.send({ success: true })
     }
     else 
     {
-      res.send({ success: false, message: "invalid email or password" })
+      res.send({ success: false, message: response.data.message })
     }
   })
 

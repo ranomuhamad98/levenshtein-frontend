@@ -147,6 +147,8 @@ $(document).ready(function () {
     var session = "<%=sessionstring %>"
     session = session.replace(/&#34;/gi, '"')
     session = JSON.parse(session)
+    GLOBAL.session = session;
+
 
     let id = "<%=id %>";
 

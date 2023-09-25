@@ -92,6 +92,9 @@ $(document).ready(function () {
     session = session.replace(/&#34;/gi, '"')
     session = JSON.parse(session)
 
+    GLOBAL.session = session;
+
+
     let addEditUser = new AddEditUserPage();
     addEditUser.init(config, userid, profile, session);
 });
