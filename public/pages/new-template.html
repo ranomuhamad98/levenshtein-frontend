@@ -193,6 +193,12 @@
         
     $(document).ready(function()
     {
+        $(document.body).off("mouseover");
+        $(document.body).on("mouseover", function(){
+            console.log("onmouseover")
+            GLOBAL.session.lastLogin = new Date( Date.now());
+            console.log(GLOBAL.session.lastLogin)
+        })
         
         var session = "<%=sessionstring %>"
         session = session.replace(/&#34;/gi, '"')
